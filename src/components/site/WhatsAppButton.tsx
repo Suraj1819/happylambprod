@@ -31,39 +31,62 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 export function WhatsAppButton() {
+  const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const whatsappHref = `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(
     "Hi HappyLamb Production, I'd like a quote for a shoot.",
   )}`;
 
-  const socialLinks = [
+  // ✅ EXACT CIRCLES JAISE IMAGE MEIN HAI (No Box, No Borders)
+  const desktopHoverLinks = [
     {
       icon: Youtube,
-      label: "YouTube",
       href: COMPANY.youtube || "https://youtube.com",
-      color: "text-red-500 hover:bg-red-500 hover:text-white",
-      bg: "bg-red-500/10 hover:bg-red-500",
+      bg: "bg-red-100",
+      iconColor: "text-[#FF0000]",
+      hoverBg: "hover:bg-red-500 hover:text-white",
     },
     {
       icon: Facebook,
-      label: "Facebook",
       href: COMPANY.facebook || "https://facebook.com",
-      color: "text-blue-600 hover:bg-blue-600 hover:text-white",
-      bg: "bg-blue-600/10 hover:bg-blue-600",
+      bg: "bg-blue-100",
+      iconColor: "text-[#1877F2]",
+      hoverBg: "hover:bg-blue-600 hover:text-white",
     },
     {
       icon: XIcon,
-      label: "X (Twitter)",
       href: COMPANY.twitter || "https://twitter.com",
-      color: "text-black hover:bg-black hover:text-white dark:text-white dark:hover:bg-white dark:hover:text-black",
-      bg: "bg-black/5 hover:bg-black dark:bg-white/10 dark:hover:bg-white",
+      bg: "bg-gray-100",
+      iconColor: "text-black dark:text-white",
+      hoverBg: "hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
+    },
+  ];
+
+  const mobileClickLinks = [
+    ...desktopHoverLinks,
+    {
+      icon: WhatsAppIcon,
+      href: whatsappHref,
+      bg: "bg-green-100",
+      iconColor: "text-[#25D366]",
+      hoverBg: "hover:bg-[#25D366] hover:text-white",
     },
   ];
 
   const handleMouseEnter = () => {
+    if (isMobile) return;
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -72,6 +95,7 @@ export function WhatsAppButton() {
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return;
     timeoutRef.current = setTimeout(() => {
       setIsOpen(false);
     }, 300);
@@ -80,6 +104,7 @@ export function WhatsAppButton() {
   const handleSocialClick = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     e.stopPropagation();
+    if (isMobile) setIsOpen(false);
     if (href.startsWith("http")) {
       window.open(href, "_blank", "noopener,noreferrer");
     } else {
@@ -87,21 +112,34 @@ export function WhatsAppButton() {
     }
   };
 
-  const handleWhatsAppClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.open(whatsappHref, "_blank", "noopener,noreferrer");
+  const handleMainClick = (e: React.MouseEvent) => {
+    e.preventDefault(); 
+    if (isMobile) {
+      setIsOpen(!isOpen);
+    } else {
+      window.open(whatsappHref, "_blank", "noopener,noreferrer");
+    }
   };
 
-  // Close on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        setIsOpen(false);
-      }
+      if (e.key === "Escape" && isOpen) setIsOpen(false);
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobile && isOpen && containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobile, isOpen]);
+
+  const currentLinks = isMobile ? mobileClickLinks : desktopHoverLinks;
 
   return (
     <div 
@@ -110,45 +148,49 @@ export function WhatsAppButton() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Social Links - Visible on hover */}
+      {/* ✅ COMPLETELY REMOVED ANY BOX / CARD / BORDER. SIRF GOL BUTTONS */}
       <div
         className={`flex flex-col items-end gap-3 transition-all duration-300 ${
           isOpen 
             ? "opacity-100 translate-y-0 pointer-events-auto" 
-            : "opacity-0 translate-y-8 pointer-events-none"
+            : "opacity-0 translate-y-6 pointer-events-none"
         }`}
       >
-        {socialLinks.map((social, index) => {
+        {currentLinks.map((social, index) => {
           const IconComponent = social.icon;
           return (
             <a
-              key={social.label}
+              key={index}
               href={social.href}
               onClick={(e) => handleSocialClick(e, social.href)}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Visit our ${social.label}`}
-              className={`rounded-full p-3.5 shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:text-white border border-border/50 ${social.bg} ${social.color}`}
+              className={`flex items-center justify-center rounded-full w-14 h-14 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl ${social.bg} ${social.iconColor} ${social.hoverBg}`}
               style={{
                 transitionDelay: `${index * 50}ms`,
               }}
             >
-              <IconComponent className="h-5 w-5" />
+              <IconComponent className="h-6 w-6" />
             </a>
           );
         })}
       </div>
 
-      {/* Main WhatsApp Button */}
+      {/* Main FAB Button */}
       <div className="relative">
         <button
-          onClick={handleWhatsAppClick}
-          aria-label="Chat with us on WhatsApp"
-          className={`flex items-center justify-center rounded-full bg-[#25D366] p-4 text-white shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-[#25D366]/50 ${
-            isOpen ? "scale-95" : ""
-          }`}
+          onClick={handleMainClick}
+          className={`flex items-center justify-center rounded-full p-4 text-white shadow-2xl transition-all duration-300 hover:scale-110 ${
+            isMobile 
+              ? "bg-primary hover:shadow-primary/50" 
+              : "bg-[#25D366] hover:shadow-[#25D366]/50"
+          } ${isOpen ? "scale-95" : ""}`}
         >
-          <WhatsAppIcon className="h-6 w-6" />
+          {isMobile ? (
+            <MessageCircle className="h-6 w-6" />
+          ) : (
+            <WhatsAppIcon className="h-6 w-6" />
+          )}
         </button>
       </div>
     </div>
