@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Instagram, Linkedin, Youtube } from "lucide-react";
 import { useState } from "react";
-import teamGroup from "@/assets/team-group.jpg";
+import teamGroup from "@/assets/team.jpeg";
 import m1 from "@/assets/Dilip Cofounder.jpeg";
 import m2 from "@/assets/Executive Director.jpeg";
 import m3 from "@/assets/Creative Director.jpeg";
@@ -52,7 +52,7 @@ function Team() {
   return (
     <>
       {/* ===== HERO ===== */}
-      <section className="pt-36 pb-12">
+      {/* <section className="pt-36 pb-12">
         <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
           <Reveal>
             <p className="eyebrow">Our team</p>
@@ -70,10 +70,36 @@ function Team() {
             />
           </Reveal>
           <p className="mt-4 text-sm text-muted-foreground">
-            Studio 04, New Delhi — the full crew, between two shoot days.
+            Studio 04, Mumbai — the full crew, between two shoot days.
+          </p>
+        </div>
+      </section> */}
+            <section className="pt-36 pb-12">
+        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+          <Reveal>
+            <p className="eyebrow">Our team</p>
+            <h1 className="display-xl mt-4 max-w-4xl text-[clamp(2.6rem,6.5vw,5rem)]">
+              The crew behind every frame
+            </h1>
+          </Reveal>
+          
+          <Reveal delay={0.12} className="mt-12 overflow-hidden rounded-[2rem] border border-border shadow-lift">
+            {/* ✅ FIX: aspect-video lagaya taaki desktop par height control mein rahe, aur object-cover taaki photo stretch na ho */}
+            <img
+              src={teamGroup}
+              alt="The full HappyLamb Production crew in the studio"
+              width={1920}
+              height={912}
+              className="w-full aspect-video object-cover"
+            />
+          </Reveal>
+          
+          <p className="mt-4 text-sm text-muted-foreground text-center sm:text-left">
+            Studio 04, Mumbai — the full crew, between two shoot days.
           </p>
         </div>
       </section>
+      
 
       {/* ===== TEAM GRID ===== */}
       <section className="py-16">

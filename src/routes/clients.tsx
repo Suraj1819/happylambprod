@@ -14,15 +14,14 @@ import {
 } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
 import { Counter } from "@/components/site/Counter";
-import { INDUSTRIES, PROJECTS, TESTIMONIALS, BRANDS } from "@/data/site";
+import { INDUSTRIES, PROJECTS, TESTIMONIALS } from "@/data/site";
 
 /* ─── import brand logos ─── */
 import aureaLogo from "@/assets/brands/hello.png";
-// import meridianLogo from "@/assets/brands/meridian.png";
-// import novoLogo from "@/assets/brands/novo.png";
-// import lumenLogo from "@/assets/brands/lumen.png";
-// import kayaLogo from "@/assets/brands/kaya.png";
-// import atlasLogo from "@/assets/brands/atlas.png";
+import cofsilsLogo from "@/assets/brands/cofsils.png";
+import skywayLogo from "@/assets/brands/skyway.jpg";
+import lumenLogo from "@/assets/brands/prompt.jpg";
+import tataHitachi from "@/assets/brands/tata hitachi.png";
 
 export const Route = createFileRoute("/clients")({
   component: Clients,
@@ -39,14 +38,29 @@ export const Route = createFileRoute("/clients")({
   }),
 });
 
+/* ✅ 1. FIX: Aapki requirement ke hisaab se exact Brand List (Meridian aur Skyway add kar diya) */
+const BRANDS = [
+  "Aurea", 
+  "Cofsils", 
+  "Skyway", 
+  "Lumen", 
+  "Meridian", // ✅ Ye add kiya
+  "tataHitachi", 
+  "Atlas", 
+  "Novo", 
+  "Kia",
+  "Tata", // Example brand
+  "Reliance", // Example brand
+];
+
 /* ─── logo map ─── */
 const LOGO_MAP: Record<string, string> = {
   Aurea: aureaLogo,
-  // Meridian: meridianLogo,
-  // Novo: novoLogo,
-  // Lumen: lumenLogo,
-  // Kaya: kayaLogo,
-  // Atlas: atlasLogo,
+  Cofsils: cofsilsLogo,
+  Skyway: skywayLogo,
+  Lumen: lumenLogo,
+  Meridian: "", // Image nahi hai, empty string rakh do, fallback apne aap kaam karega
+  Tata: tataHitachi, // Add Tata logo
 };
 
 const BRAND_LOGOS = BRANDS.map((name) => ({
@@ -181,6 +195,7 @@ function Clients() {
             </h2>
           </Reveal>
 
+          {/* ✅ Fixed Grid: Mobile - 2 cols, Tablet - 3 cols, Desktop - 4 cols */}
           <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {BRAND_LOGOS.map((brand, i) => (
               <Reveal key={brand.name} delay={(i % 8) * 0.04}>
@@ -192,11 +207,12 @@ function Clients() {
                       className="max-h-16 max-w-[150px] object-contain transition-transform duration-300 group-hover:scale-110"
                     />
                   ) : (
+                    // ✅ 2. FIX: Beautiful Fallback Logo (Jo "Meridian" jaise brands ke liye automatic aayega)
                     <div className="flex flex-col items-center gap-2">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 font-display text-xl font-bold text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 font-display text-xl font-bold text-primary transition-colors group-hover:bg-primary group-hover:text-white">
                         {brand.name.charAt(0)}
                       </div>
-                      <span className="text-sm font-semibold tracking-wide text-foreground/75">
+                      <span className="text-xs font-semibold tracking-wide text-foreground/75">
                         {brand.name}
                       </span>
                     </div>
