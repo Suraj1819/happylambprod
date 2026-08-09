@@ -97,6 +97,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      // ✅ FIX: mask-icon use kiya taaki favicon.png Circle dikhe
+      { rel: "mask-icon", href: "/favicon.png", color: "#000000" },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -117,7 +119,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           address: {
             "@type": "PostalAddress",
             streetAddress: "Studio 04, Creative Quarter",
-            addressLocality: "New Delhi",
+            addressLocality: "Mumbai",
             addressCountry: "IN",
           },
           telephone: "+91 98765 43210",
@@ -153,7 +155,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Header />
       <main>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
       </main>
       <Footer />

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
 import { SERVICES } from "@/data/site";
 
@@ -33,69 +33,76 @@ export const Route = createFileRoute("/services/")({
 function ServicesIndex() {
   return (
     <>
-      {/* ═══════════════ HEADER ═══════════════ */}
-      {/* FIX 1: Mobile ke liye top padding kam kar di (pt-32), taaki small screens pe header zyada space na le */}
-      <section className="relative overflow-hidden pt-32 pb-12 sm:pt-36 sm:pb-16">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{ background: "var(--gradient-soft)" }}
-          aria-hidden
-        />
-        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8">
+      {/* ═══════════════ HERO (SYMMETRIC - NO ORANGE) ═══════════════ */}
+      <section className="relative overflow-hidden min-h-[60vh] flex items-center pt-28 pb-12 bg-background border-b border-border/40">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10 w-full">
           <Reveal>
-            <p className="eyebrow">What we do</p>
-            {/* FIX 2: 'break-words' lagaya taaki lamba text mobile pe screen se bahar na nikle */}
-            <h1 className="display-xl mt-4 max-w-4xl break-words text-[clamp(2rem,6.5vw,5rem)]">
-              Production services built for brands that mean business
+            {/* Tiny Divider Line (Gray) */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-8 bg-border/50"></div>
+              <p className="text-xs tracking-[0.3em] text-muted-foreground/80 uppercase font-medium">Our Services</p>
+            </div>
+            
+            {/* Italic + Bold Heading (Gray) */}
+            <h1 className="text-[clamp(3rem,7.5vw,5.5rem)] leading-[0.95] tracking-tighter font-medium text-foreground max-w-4xl">
+              Production services <br />
+              <span className="italic text-muted-foreground/60">for brands that mean business.</span>
             </h1>
-            {/* FIX 3: Mobile pe text size thoda chhota (text-base) rakha taaki easily padha ja sake */}
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              From a single product shot to a full brand launch — every service below is
-              strategised, produced and finished by our in-house team. No middlemen, no
-              handoffs, no accountability gaps.
+            
+            <p className="mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
+              Our founder believed that mid-market brands deserve global creative standards — 
+              not work that looks like it was made on a spreadsheet. Every service listed below 
+              is strategized, produced, and finished in-house. No middlemen, no handoffs, no accountability gaps.
             </p>
+            
+            <div className="mt-8 flex flex-wrap gap-6">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 border-b border-foreground pb-1 text-sm tracking-wider hover:gap-4 transition-all duration-300"
+              >
+                Start a project <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ═══════════════ SERVICES GRID ═══════════════ */}
-      {/* FIX 4: Mobile py-16, Desktop py-24 taaki mobile par thoda compact lage */}
-      <section className="border-t border-border bg-surface py-16 sm:py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {/* ═══════════════ SERVICES GRID (Minimal & Symmetric) ═══════════════ */}
+      <section className="bg-background py-24 sm:py-28">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map((s, i) => (
-              <Reveal key={s.slug} delay={i * 0.04}>
+              <Reveal key={s.slug} delay={i * 0.06}>
                 <Link
                   to="/services/$slug"
                   params={{ slug: s.slug }}
-                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-500 hover:border-primary/30 hover:shadow-lift"
+                  className="group flex h-full flex-col overflow-hidden rounded-2xl bg-surface border border-border/40 transition-all duration-500 hover:shadow-lg hover:-translate-y-1"
                 >
                   {/* Image */}
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl">
                     <img
                       src={s.image}
                       alt={s.title}
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 grayscale-[10%] group-hover:grayscale-0"
                     />
-                    {/* Subtle overlay on hover */}
-                    <div className="absolute inset-0 bg-ink/0 transition-colors duration-500 group-hover:bg-ink/10" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/10 via-transparent to-transparent pointer-events-none" />
                   </div>
 
-                  {/* Content */}
-                  {/* FIX 5: Mobile padding (p-5) se content kaafi fit baithta hai, Desktop pe p-7 */}
-                  <div className="flex flex-1 flex-col p-5 sm:p-7">
-                    <h2 className="font-heading text-base tracking-wide uppercase sm:text-lg">
+                  {/* Content - Clean Minimal Layout */}
+                  <div className="flex flex-1 flex-col p-6 sm:p-8">
+                    <h2 className="font-medium text-xl tracking-tight text-foreground/90 group-hover:text-foreground transition-colors">
                       {s.title}
                     </h2>
-                    <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    <p className="mt-3 flex-1 text-sm text-muted-foreground leading-relaxed">
                       {s.short}
                     </p>
-                    <div className="mt-6 flex items-center gap-2 border-t border-border pt-5">
-                      <span className="text-sm font-medium text-primary">
+                    <div className="mt-6 flex items-center justify-between border-t border-border/50 pt-5">
+                      {/* 🚫 REMOVED ORANGE: Now using `text-muted-foreground/80` */}
+                      <span className="text-xs font-medium tracking-wider text-muted-foreground/80">
                         View details
                       </span>
-                      <ArrowRight className="h-4 w-4 text-primary transition-transform duration-300 group-hover:translate-x-1.5" />
+                      <ArrowRight className="h-4 w-4 text-muted-foreground/40 transition-transform duration-300 group-hover:translate-x-1.5 group-hover:text-muted-foreground/80" />
                     </div>
                   </div>
                 </Link>
@@ -105,38 +112,33 @@ function ServicesIndex() {
         </div>
       </section>
 
-      {/* ═══════════════ BOTTOM CTA ═══════════════ */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+      {/* ═══════════════ BOTTOM CTA (SYMMETRIC - DARK) ═══════════════ */}
+      <section className="bg-ink py-28 text-ink-foreground relative overflow-hidden border-t border-ink-foreground/10">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
+        
+        <div className="relative mx-auto max-w-4xl px-6 text-center">
           <Reveal>
-            {/* FIX 6: Mobile pe padding (p-6) aur rounded (rounded-2xl) kar diya taaki screen par jam ke aaye */}
-            <div className="grid items-center gap-8 rounded-2xl border border-border bg-card p-6 shadow-soft sm:rounded-[2rem] sm:p-10 lg:grid-cols-[1fr_auto] lg:p-14 lg:gap-10">
-              <div>
-                <h2 className="display-xl text-[clamp(1.5rem,4vw,3rem)]">
-                  Not sure which service fits?
-                </h2>
-                {/* FIX 7: mobile text base, desktop text base hi rakhna better hai readability ke liye */}
-                <p className="mt-3 max-w-xl text-base text-muted-foreground sm:text-base">
-                  Tell us what you're trying to achieve. We'll map the right production
-                  approach and give you a straight answer on timeline and budget.
-                </p>
-              </div>
-              
-              {/* FIX 8 (Most Important): Mobile par buttons 'w-full' (full width) aur gap-4 diya taaki finger se tap karna mushkil na ho */}
-              <div className="flex flex-col gap-4 sm:flex-row lg:flex-col w-full sm:w-auto">
-                <Link
-                  to="/contact"
-                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 font-heading text-[0.7rem] tracking-[0.2em] text-ink-foreground uppercase transition-all hover:bg-primary hover:shadow-glow sm:px-8 sm:text-[0.75rem]"
-                >
-                  Start a conversation <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  to="/work"
-                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-border px-6 py-4 font-heading text-[0.7rem] tracking-[0.2em] text-foreground uppercase transition-colors hover:bg-surface sm:px-8 sm:text-[0.75rem]"
-                >
-                  See our work
-                </Link>
-              </div>
+            <h2 className="text-5xl md:text-6xl font-medium tracking-tight leading-tight">
+              Ready to build something <br />
+              <span className="italic text-ink-foreground/40">worth watching</span>?
+            </h2>
+            <p className="mx-auto mt-6 max-w-xl text-ink-foreground/60 text-lg">
+              Not sure which service fits? Tell us what you're trying to achieve. 
+              We'll map the right production approach and give you a straight answer.
+            </p>
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-3 bg-primary text-ink px-10 py-4 rounded-full text-sm font-medium tracking-wide hover:bg-primary/90 hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/20"
+              >
+                Start a conversation <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/work"
+                className="inline-flex items-center gap-2 text-sm text-ink-foreground/60 hover:text-ink-foreground transition-colors"
+              >
+                See our work
+              </Link>
             </div>
           </Reveal>
         </div>

@@ -51,59 +51,46 @@ function Team() {
 
   return (
     <>
-      {/* ===== HERO ===== */}
-      {/* <section className="pt-36 pb-12">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+      {/* ═══════════════ 1. HERO (SYMMETRIC) ═══════════════ */}
+      <section className="relative overflow-hidden min-h-[50vh] flex items-center pt-28 pb-12 bg-background border-b border-border/40">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10 w-full">
           <Reveal>
-            <p className="eyebrow">Our team</p>
-            <h1 className="display-xl mt-4 max-w-4xl text-[clamp(2.6rem,6.5vw,5rem)]">
-              The crew behind every frame
+            {/* Tiny Divider */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-8 bg-primary/50"></div>
+              <p className="text-xs tracking-[0.3em] text-foreground/60 uppercase font-medium">Our Team</p>
+            </div>
+            
+            {/* Italic + Bold Heading */}
+            <h1 className="text-[clamp(3rem,7.5vw,5.5rem)] leading-[0.95] tracking-tighter font-medium text-foreground max-w-4xl">
+              The crew behind <br />
+              <span className="italic text-muted-foreground/60">every frame.</span>
             </h1>
           </Reveal>
-          <Reveal delay={0.12} className="mt-12 overflow-hidden rounded-[2rem] border border-border shadow-lift">
-            <img
-              src={teamGroup}
-              alt="The full HappyLamb Production crew in the studio"
-              width={1920}
-              height={912}
-              className="w-full object-cover"
-            />
-          </Reveal>
-          <p className="mt-4 text-sm text-muted-foreground">
-            Studio 04, Mumbai — the full crew, between two shoot days.
-          </p>
         </div>
-      </section> */}
-            <section className="pt-36 pb-12">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal>
-            <p className="eyebrow">Our team</p>
-            <h1 className="display-xl mt-4 max-w-4xl text-[clamp(2.6rem,6.5vw,5rem)]">
-              The crew behind every frame
-            </h1>
-          </Reveal>
-          
-          <Reveal delay={0.12} className="mt-12 overflow-hidden rounded-[2rem] border border-border shadow-lift">
-            {/* ✅ FIX: aspect-video lagaya taaki desktop par height control mein rahe, aur object-cover taaki photo stretch na ho */}
+      </section>
+
+      {/* ═══════════════ 2. TEAM GROUP PHOTO ═══════════════ */}
+      <section className="py-12 bg-background">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+          <Reveal delay={0.1} className="overflow-hidden rounded-xl border border-border/40 shadow-sm">
             <img
               src={teamGroup}
               alt="The full HappyLamb Production crew in the studio"
               width={1920}
               height={912}
-              className="w-full aspect-video object-cover"
+              className="w-full aspect-video object-cover grayscale-[10%]"
             />
           </Reveal>
-          
-          <p className="mt-4 text-sm text-muted-foreground text-center sm:text-left">
+          <p className="mt-4 text-center text-xs text-muted-foreground tracking-wider">
             Studio 04, Mumbai — the full crew, between two shoot days.
           </p>
         </div>
       </section>
-      
 
-      {/* ===== TEAM GRID ===== */}
-      <section className="py-16">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+      {/* ═══════════════ 3. TEAM GRID (Professional & Minimal) ═══════════════ */}
+      <section className="py-24 bg-background">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
           <div className="grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
             {TEAM.map((member, i) => {
               const photo = PHOTOS[i % PHOTOS.length];
@@ -126,7 +113,7 @@ function Team() {
                     onMouseLeave={() => setHoveredId(null)}
                   >
                     {/* Photo */}
-                    <div className="relative aspect-3/4 overflow-hidden rounded-[2rem] border border-border bg-surface shadow-soft transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-lift">
+                    <div className="relative aspect-3/4 overflow-hidden rounded-xl border border-border/40 bg-surface shadow-sm transition-all duration-300 group-hover:shadow-lg">
                       <img
                         src={photo}
                         alt={`${member.name}, ${member.role}`}
@@ -134,27 +121,27 @@ function Team() {
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       
-                      {/* Social Links */}
+                      {/* Social Links - Only visible on hover */}
                       {showSocial && (
-                        <div className="absolute inset-x-0 bottom-0 flex justify-end gap-2 bg-gradient-to-t from-ink/60 to-transparent p-5 opacity-100 sm:opacity-0 transition-opacity duration-500 sm:group-hover:opacity-100">
-                          {/* LinkedIn - for both Founder and Branch Head */}
+                        <div className="absolute inset-x-0 bottom-0 flex justify-end gap-2 bg-gradient-to-t from-ink/60 to-transparent p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                          {/* LinkedIn */}
                           <a 
                             href={member.linkedin || "#"}
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label={`${member.name} on LinkedIn`} 
-                            className="grid h-10 w-10 place-items-center rounded-full bg-background/90 text-foreground transition hover:bg-primary hover:text-primary-foreground"
+                            className="grid h-9 w-9 place-items-center rounded-full bg-background/90 text-foreground transition hover:bg-primary hover:text-primary-foreground"
                           >
                             <Linkedin className="h-4 w-4" />
                           </a>
                           
-                          {/* Instagram - for both Founder and Branch Head */}
+                          {/* Instagram */}
                           <a 
                             href={member.instagram || "#"}
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label={`${member.name} on Instagram`} 
-                            className="grid h-10 w-10 place-items-center rounded-full bg-background/90 text-foreground transition hover:bg-primary hover:text-primary-foreground"
+                            className="grid h-9 w-9 place-items-center rounded-full bg-background/90 text-foreground transition hover:bg-primary hover:text-primary-foreground"
                           >
                             <Instagram className="h-4 w-4" />
                           </a>
@@ -166,7 +153,7 @@ function Team() {
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label={`${member.name} on YouTube`} 
-                              className="grid h-10 w-10 place-items-center rounded-full bg-background/90 text-foreground transition hover:bg-primary hover:text-primary-foreground"
+                              className="grid h-9 w-9 place-items-center rounded-full bg-background/90 text-foreground transition hover:bg-primary hover:text-primary-foreground"
                             >
                               <Youtube className="h-4 w-4" />
                             </a>
@@ -175,15 +162,20 @@ function Team() {
                       )}
                     </div>
 
-                    {/* Text */}
+                    {/* Text - Professional & Minimal */}
                     <div className={lead ? "max-w-xl sm:mt-0" : "mt-6"}>
-                      <h2 className={`display-xl text-foreground ${lead ? "text-4xl sm:text-5xl" : "text-2xl"}`}>
+                      {/* ✅ FULL NAME: Bold (font-medium), tracking-tight, Black */}
+                      <h2 className={`font-medium tracking-tight text-foreground ${lead ? "text-4xl sm:text-5xl" : "text-3xl"}`}>
                         {member.name}
                       </h2>
-                      <p className="mt-2 font-heading text-[0.78rem] tracking-[0.2em] text-primary uppercase">
+                      
+                      {/* ✅ ROLE: Dark Gray (text-muted-foreground/80) + Uppercase */}
+                      <p className="mt-2 text-xs tracking-[0.2em] text-muted-foreground/80 uppercase font-medium">
                         {member.role}
                       </p>
-                      <p className={`mt-4 leading-relaxed text-muted-foreground ${lead ? "text-base" : "text-sm"}`}>
+                      
+                      {/* ✅ BIO: Gray + Italic (Professional Magazine Style) */}
+                      <p className={`mt-4 leading-relaxed italic text-muted-foreground/80 ${lead ? "text-base" : "text-sm"}`}>
                         {member.bio}
                       </p>
                     </div>
@@ -195,15 +187,20 @@ function Team() {
         </div>
       </section>
 
-      {/* ===== INTERNS SECTION ===== */}
-      <section className="py-20 bg-gradient-to-b from-background to-surface/50">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+      {/* ═══════════════ 4. INTERNSHIP PROGRAM (Clean & Premium) ═══════════════ */}
+      <section className="border-y border-border/30 bg-surface/50 py-24">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
           <Reveal className="mb-16 text-center">
-            <p className="eyebrow justify-center">Internship Program</p>
-            <h2 className="display-xl mt-4 text-3xl sm:text-4xl">
-              Future talent <span className="text-primary">in the making</span>
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">Internship Program</p>
+              <div className="h-px w-6 bg-border"></div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight">
+              Future talent <br />
+              <span className="italic text-muted-foreground/60">in the making.</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-base">
               Meet the bright minds learning the craft alongside our core team — 
               bringing fresh energy, new perspectives, and a hunger to create.
             </p>
@@ -215,7 +212,7 @@ function Team() {
               return (
                 <Reveal key={intern.name} delay={i * 0.08}>
                   <div 
-                    className="group relative overflow-hidden rounded-[2rem] border border-border bg-background shadow-soft transition-all duration-500 hover:-translate-y-3 hover:shadow-lift"
+                    className="group relative overflow-hidden rounded-xl border border-border/40 bg-background shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                     onMouseEnter={() => setHoveredId(intern.name)}
                     onMouseLeave={() => setHoveredId(null)}
                   >
@@ -225,47 +222,50 @@ function Team() {
                         src={photo}
                         alt={`${intern.name}, ${intern.role}`}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[10%] group-hover:grayscale-0"
                       />
                       
                       {/* Badge */}
-                      <div className="absolute left-4 top-4 rounded-full bg-primary/90 px-3 py-1 text-[0.6rem] font-bold tracking-wider text-primary-foreground uppercase backdrop-blur-sm">
+                      <div className="absolute left-4 top-4 rounded-full bg-primary/90 px-3 py-1 text-[10px] font-medium text-white uppercase backdrop-blur-sm">
                         Intern
                       </div>
 
-                      {/* Social Links - Only LinkedIn for interns */}
-                      <div className="absolute inset-x-0 bottom-0 flex justify-end gap-2 bg-gradient-to-t from-ink/70 to-transparent p-5 opacity-100 sm:opacity-0 transition-opacity duration-500 sm:group-hover:opacity-100">
+                      {/* Social Links - Only LinkedIn */}
+                      <div className="absolute inset-x-0 bottom-0 flex justify-end gap-2 bg-gradient-to-t from-ink/70 to-transparent p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
                         <a 
                           href={intern.linkedin || "#"}
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`${intern.name} on LinkedIn`} 
-                          className="grid h-10 w-10 place-items-center rounded-full bg-background/90 text-foreground transition hover:bg-primary hover:text-primary-foreground"
+                          className="grid h-9 w-9 place-items-center rounded-full bg-background/90 text-foreground transition hover:bg-primary hover:text-primary-foreground"
                         >
                           <Linkedin className="h-4 w-4" />
                         </a>
                       </div>
                     </div>
 
-                    {/* Intern Info */}
+                    {/* Intern Info - Professional & Minimal */}
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-foreground">
-                        {intern.name}
-                      </h3>
-                      <p className="mt-1 font-heading text-[0.7rem] tracking-[0.15em] text-primary uppercase">
+                      {/* ✅ FULL NAME: Bold (font-medium), tracking-tight, Black */}
+                      <h3 className="font-medium text-2xl tracking-tight text-foreground">{intern.name}</h3>
+                      
+                      {/* ✅ ROLE: Dark Gray + Uppercase */}
+                      <p className="mt-1 text-xs tracking-[0.15em] text-muted-foreground/80 uppercase">
                         {intern.role}
                       </p>
-                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      
+                      {/* ✅ BIO: Gray + Italic */}
+                      <p className="mt-3 text-sm leading-relaxed italic text-muted-foreground/80">
                         {intern.bio}
                       </p>
                       
                       {/* Intern-specific details */}
-                      <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-border/60 pt-4">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[0.65rem] font-medium text-primary">
+                      <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-border/30 pt-4">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-medium text-primary">
                           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                           {intern.duration || "6 months"}
                         </span>
-                        <span className="text-[0.65rem] text-muted-foreground">
+                        <span className="text-[10px] text-muted-foreground">
                           Mentored by {intern.mentor || "Core Team"}
                         </span>
                       </div>
@@ -276,9 +276,9 @@ function Team() {
             })}
           </div>
 
-          {/* Call to Action */}
+          {/* CTA - Apply for Internship */}
           <Reveal delay={0.2} className="mt-16 text-center">
-            <div className="inline-flex items-center gap-6 rounded-full border border-border bg-surface/80 px-8 py-4 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-4 rounded-full border border-border/40 bg-background/50 px-6 py-3 backdrop-blur-sm">
               <span className="text-sm text-muted-foreground">
                 🌱 Interested in interning with us?
               </span>
@@ -286,20 +286,22 @@ function Team() {
                 href="/careers"
                 className="inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:gap-3"
               >
-                Apply now
-                <span className="text-lg">→</span>
+                Apply now →
               </a>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ===== STUDIO CULTURE ===== */}
-      <section className="bg-surface py-20">
-        <div className="mx-auto grid max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr]">
+      {/* ═══════════════ 5. STUDIO CULTURE (Clean Split) ═══════════════ */}
+      <section className="py-24 bg-background">
+        <div className="mx-auto grid max-w-[1400px] gap-10 px-6 sm:px-10 lg:grid-cols-[0.8fr_1.2fr]">
           <Reveal>
-            <p className="eyebrow">Studio culture</p>
-            <h2 className="display-xl mt-4 text-3xl sm:text-4xl">How we work together</h2>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">Culture</p>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight">How we work together.</h2>
           </Reveal>
           <Reveal delay={0.1} className="space-y-5 text-muted-foreground">
             <p className="text-lg leading-relaxed">

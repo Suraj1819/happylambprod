@@ -31,25 +31,27 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 export function WhatsAppButton() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const checkTouch = () => {
+      const isTouch = 'ontouchstart' in window || window.innerWidth < 1024;
+      setIsTouchDevice(isTouch);
     };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    
+    checkTouch();
+    window.addEventListener("resize", checkTouch);
+    return () => window.removeEventListener("resize", checkTouch);
   }, []);
 
   const whatsappHref = `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(
     "Hi HappyLamb Production, I'd like a quote for a shoot.",
   )}`;
 
-  // ✅ EXACT CIRCLES JAISE IMAGE MEIN HAI (No Box, No Borders)
+  // PC / Desktop Hover Options (WhatsApp is the Main Button, so it is NOT in this list)
   const desktopHoverLinks = [
     {
       icon: Youtube,
@@ -74,7 +76,8 @@ export function WhatsAppButton() {
     },
   ];
 
-  const mobileClickLinks = [
+  // Mobile / Tablet Click Options (WhatsApp is listed here so it opens on click)
+  const touchClickLinks = [
     ...desktopHoverLinks,
     {
       icon: WhatsAppIcon,
@@ -86,7 +89,7 @@ export function WhatsAppButton() {
   ];
 
   const handleMouseEnter = () => {
-    if (isMobile) return;
+    if (isTouchDevice) return;
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -95,7 +98,7 @@ export function WhatsAppButton() {
   };
 
   const handleMouseLeave = () => {
-    if (isMobile) return;
+    if (isTouchDevice) return;
     timeoutRef.current = setTimeout(() => {
       setIsOpen(false);
     }, 300);
@@ -104,7 +107,7 @@ export function WhatsAppButton() {
   const handleSocialClick = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isMobile) setIsOpen(false);
+    if (isTouchDevice) setIsOpen(false);
     if (href.startsWith("http")) {
       window.open(href, "_blank", "noopener,noreferrer");
     } else {
@@ -114,9 +117,10 @@ export function WhatsAppButton() {
 
   const handleMainClick = (e: React.MouseEvent) => {
     e.preventDefault(); 
-    if (isMobile) {
+    if (isTouchDevice) {
       setIsOpen(!isOpen);
     } else {
+      // On PC, clicking the button directly opens WhatsApp
       window.open(whatsappHref, "_blank", "noopener,noreferrer");
     }
   };
@@ -131,15 +135,15 @@ export function WhatsAppButton() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isMobile && isOpen && containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (isTouchDevice && isOpen && containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isMobile, isOpen]);
+  }, [isTouchDevice, isOpen]);
 
-  const currentLinks = isMobile ? mobileClickLinks : desktopHoverLinks;
+  const currentLinks = isTouchDevice ? touchClickLinks : desktopHoverLinks;
 
   return (
     <div 
@@ -148,7 +152,7 @@ export function WhatsAppButton() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* ✅ COMPLETELY REMOVED ANY BOX / CARD / BORDER. SIRF GOL BUTTONS */}
+      {/* Menu Items Container */}
       <div
         className={`flex flex-col items-end gap-3 transition-all duration-300 ${
           isOpen 
@@ -181,12 +185,16 @@ export function WhatsAppButton() {
         <button
           onClick={handleMainClick}
           className={`flex items-center justify-center rounded-full p-4 text-white shadow-2xl transition-all duration-300 hover:scale-110 ${
-            isMobile 
+            isTouchDevice 
               ? "bg-primary hover:shadow-primary/50" 
               : "bg-[#25D366] hover:shadow-[#25D366]/50"
           } ${isOpen ? "scale-95" : ""}`}
         >
-          {isMobile ? (
+          {/* 
+             FIX: On PC (Touch Device false), ALWAYS show WhatsApp Icon. 
+             On Mobile/Tablet (Touch Device true), Show Menu Icon. 
+          */}
+          {isTouchDevice ? (
             <MessageCircle className="h-6 w-6" />
           ) : (
             <WhatsAppIcon className="h-6 w-6" />

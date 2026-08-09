@@ -46,7 +46,7 @@ function getYouTubeId(src: string): string | null {
       return match ? match[1] : null;
     }
     
-    if (url.includes('watch?v=') || url.includes('watch?') && url.includes('v=')) {
+    if (url.includes('watch?v=') || (url.includes('watch?') && url.includes('v='))) {
       const match = url.match(/[?&]v=([^?&]+)/);
       return match ? match[1] : null;
     }
@@ -73,6 +73,7 @@ function ytThumb(id: string, q: "maxresdefault" | "hqdefault" = "maxresdefault")
   return `https://i.ytimg.com/vi/${id}/${q}.jpg`;
 }
 
+// ✅ FIX: window.location.origin ko safe kiya
 function ytModalEmbed(id: string) {
   const p = new URLSearchParams({
     autoplay: "1",
@@ -80,10 +81,12 @@ function ytModalEmbed(id: string) {
     modestbranding: "1",
     playsinline: "1",
     fs: "1",
+    origin: typeof window !== "undefined" ? window.location.origin : "", // ✅ Important fix
   });
   return `https://www.youtube-nocookie.com/embed/${id}?${p}`;
 }
 
+// ✅ FIX: youtube-nocookie use kiya taaki "Sign in" error na aaye
 function ytHoverEmbed(id: string) {
   const p = new URLSearchParams({
     autoplay: "1",
@@ -495,7 +498,7 @@ export function VideoPlayer({
           />
         )}
 
-        {/* YouTube hover preview */}
+        {/* YouTube hover preview - Fixed with youtube-nocookie */}
         {isYT && ytId && hovered && (
           <iframe
             src={ytHoverEmbed(ytId)}

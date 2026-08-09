@@ -11,41 +11,45 @@ import {
   Compass,
   FileCheck,
   Globe2,
-  HeartHandshake,
   Layers,
   Lightbulb,
   MonitorPlay,
   Palette,
-  Rocket,
-  ShieldCheck,
   Target,
   TrendingUp,
-  Truck,
   Users,
   Zap,
+  Sparkles,
+  MapPin,
+  Phone,
+  Mail,
 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import heroStudio from "@/assets/hero-studio.jpg";
 import teamGroup from "@/assets/team-group.jpg";
+import m1 from "@/assets/Dilip Cofounder.jpeg"; // 🟢 Founder Photo Import
 import { Reveal } from "@/components/site/Reveal";
-import { Counter } from "@/components/site/Counter";
+
+// 🟢 Import Studio Photos
+import mumbaiStudioImg from "@/assets/studio-mumbai.jpg";
+import patnaStudioImg from "@/assets/studio-patna.jpg";
+
+// 🟢 Import Studio Head Photos
+import mumbaiHeadImg from "@/assets/Dilip Cofounder.jpeg";
+import patnaHeadImg from "@/assets/Executive Director.jpeg";
 
 export const Route = createFileRoute("/about")({
   component: About,
   head: () => ({
     meta: [
-      { title: "About HappyLamb Production — Our Story, Team & Process" },
+      { title: "About HappyLamb Production — Premium Creative Studio" },
       {
         name: "description",
-        content:
-          "HappyLamb Production is a full-service advertising, film production and branding studio based in India. Learn about our journey, capabilities, team and why 50+ brands trust us.",
+        content: "A full-service production, film & branding studio in India. Built on craft, contracts, and credibility since 2016.",
       },
       { property: "og:title", content: "About HappyLamb Production" },
-      {
-        property: "og:description",
-        content:
-          "From a two-person studio to India's trusted production partner — discover our story, process, infrastructure and the people behind the work.",
-      },
-      { property: "og:url", content: "/about" },
+      { property: "og:description", content: "From strategy to screen. Discover our story, process, and the people behind the work." },
     ],
     links: [{ rel: "canonical", href: "/about" }],
   }),
@@ -62,106 +66,78 @@ const TIMELINE = [
   {
     year: "2018",
     title: "First national campaign",
-    text: "Landed our first pan-India FMCG television commercial. The campaign delivered a 3.2× ROAS, put the studio on the national map, and taught us how to scale a production unit under real pressure.",
+    text: "Landed our first pan-India FMCG television commercial. The campaign delivered a 3.2× ROAS and put the studio on the national map.",
   },
   {
     year: "2020",
     title: "Resilience through disruption",
-    text: "When the pandemic shut every set in India, we pivoted to remote-directed shoots, built a home-studio network across 8 cities and delivered 40+ campaigns without a single day of lost output.",
+    text: "Pivoted to remote-directed shoots, built a home-studio network across 8 cities and delivered 40+ campaigns without a single day of lost output.",
   },
   {
     year: "2021",
     title: "Full-service integration",
-    text: "Brought line production, in-house catalogue/e-commerce studios, a dedicated post-production suite and a brand-strategy division under one roof — eliminating vendor chains entirely.",
+    text: "Brought line production, in-house studios, a dedicated post-production suite and a brand-strategy division under one roof.",
   },
   {
     year: "2023",
     title: "Performance creative lab",
-    text: "Merged media planning and creative execution into a single performance team. Ad-performance data now directly shapes scripting, casting and edit decisions — closing the feedback loop.",
+    text: "Merged media planning and creative execution into a single performance team, closing the feedback loop between data and craft.",
   },
   {
     year: "2025",
     title: "AI-accelerated workflows",
-    text: "Integrated AI-assisted scripting, automated transcript-based rough cuts and bulk retouching pipelines — cutting average review cycles by 45 % and turnaround times by a third.",
-  },
-];
-
-const WHY = [
-  {
-    icon: Layers,
-    title: "End-to-end under one roof",
-    text: "Strategy, creative direction, film production, still photography, design, post-production, media planning and line production — all in-house. No middlemen, no finger-pointing, one P&L.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Compliance & permissions managed",
-    text: "Government shooting permissions, location agreements, artist contracts, insurance, broadcast clearance and censorship submissions — handled by our dedicated compliance cell across all 28 states.",
-  },
-  {
-    icon: Clock,
-    title: "Deadline-as-contract culture",
-    text: "Every project gets a producer-led schedule with built-in contingencies. On-time delivery is written into our contracts — not treated as a hopeful target.",
-  },
-  {
-    icon: Award,
-    title: "Craft-first, always",
-    text: "Our directors colour-grade their own work. Our DOPs refuse to ship a frame they wouldn't sign. This isn't aspiration — it's our operational standard.",
-  },
-];
-
-const PROCESS = [
-  {
-    step: "01",
-    title: "Brief & brand immersion",
-    text: "We study the brand book, audit existing assets, interview stakeholders and map the competitive landscape before writing a single word.",
-  },
-  {
-    step: "02",
-    title: "Strategy & the big idea",
-    text: "Data-informed creative strategy. We define the target psyche, single-minded proposition and creative territory — then pressure-test it before ideation.",
-  },
-  {
-    step: "03",
-    title: "Pre-production & approvals",
-    text: "Storyboards, casting, location recce, permits, shot lists, crew booking and a detailed production budget — all signed off before any gear leaves the shelf.",
-  },
-  {
-    step: "04",
-    title: "Production",
-    text: "Producer-led floor management with real-time client dashboards. Multi-camera film shoots, controlled studio stills, or hybrid setups — executed to the frame plan.",
-  },
-  {
-    step: "05",
-    title: "Post, grade & sound",
-    text: "Edit, VFX, colour grading, sound design and music — all in-house. Review happens on secure client portals with frame-accurate annotations.",
-  },
-  {
-    step: "06",
-    title: "Delivery, launch & learnings",
-    text: "Final assets delivered in every required format and spec. Post-launch, we measure performance, document learnings and feed them back into the next brief.",
+    text: "Integrated AI-assisted workflows cutting average review cycles by 45% and turnaround times by a third, without compromising quality.",
   },
 ];
 
 const VALUES = [
   {
     icon: Target,
-    title: "Relentless precision",
-    text: "Every frame, every word, every pixel has a reason to exist. If it doesn't serve the brief, it doesn't make the cut.",
+    title: "Precision",
+    text: "Every frame, every word, every pixel has a reason to exist. We don't ship work we wouldn't sign our names to.",
   },
   {
-    icon: HeartHandshake,
-    title: "Partnership over transactions",
-    text: "We don't want to be a vendor on your list. We want to be the studio you call first when the stakes are high.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Informed creativity",
-    text: "Intuition backed by data. We combine audience insights, performance metrics and cultural context to make work that moves people — and moves product.",
+    icon: Sparkles,
+    title: "Informed Creativity",
+    text: "Intuition backed by data. We combine audience insights and cultural context to make work that moves people.",
   },
   {
     icon: Zap,
-    title: "Speed without shortcuts",
-    text: "AI tools and lean processes help us move fast. Craft standards and review rigour ensure we never move careless.",
+    title: "Speed & Integrity",
+    text: "AI tools and lean processes help us move fast. Craft standards ensure we never move careless.",
+  },
+];
+
+const PROCESS = [
+  {
+    step: "01",
+    title: "Immerse",
+    text: "We study the brand book, audit existing assets, and map the competitive landscape before writing a single word.",
+  },
+  {
+    step: "02",
+    title: "Strategize",
+    text: "Data-informed creative strategy. We define the single-minded proposition and pressure-test it before ideation.",
+  },
+  {
+    step: "03",
+    title: "Pre-Production",
+    text: "Storyboards, casting, recce, permits, and shot lists — all signed off before any gear leaves the shelf.",
+  },
+  {
+    step: "04",
+    title: "Execute",
+    text: "Producer-led floor management with real-time client dashboards. Executed to the exact frame plan.",
+  },
+  {
+    step: "05",
+    title: "Perfect",
+    text: "Edit, VFX, colour grading, sound design — all in-house. Review happens on secure portals with frame-accurate annotations.",
+  },
+  {
+    step: "06",
+    title: "Launch & Learn",
+    text: "Final assets delivered in every required format. Post-launch, we measure performance and feed learnings back into the next brief.",
   },
 ];
 
@@ -173,223 +149,268 @@ const CAPABILITIES = [
   { icon: TrendingUp, label: "Performance Creative & A/B Testing" },
   { icon: Globe2, label: "Pan-India Line Production" },
   { icon: Building2, label: "Catalogue & E-commerce Shoots" },
-  { icon: Truck, label: "On-location Production Management" },
-  { icon: FileCheck, label: "Broadcast Clearance & Compliance" },
-  { icon: Compass, label: "Location Scouting & Permitting" },
-  { icon: CalendarCheck, label: "Event Coverage & Documentation" },
-  { icon: Users, label: "Casting & Talent Management" },
+  { icon: Layers, label: "End-to-End Brand Strategy" },
 ];
 
-const CERTIFICATIONS = [
-  "MSME Registered",
-  "GST Compliant (India)",
-  "ISO 9001:2015 Quality Management",
-  "MPAA / CBFC Broadcast Clearance Partner",
-  "Professional Indemnity Insured",
-  "ShopAct & Trade License — Maharashtra",
+/* ─── Studio Data ─── */
+const STUDIOS = [
+  {
+    city: "Mumbai",
+    address: "Happy Lamb Production OPC PVT.LTD, 505, 5th Floor, Bhoomi Building, Sanjay Nagar Co.Op. Society, Cama Estate, Behind Future Studio, Goregoan (E.), Mumbai - 400063",
+    phone: "+91 9820778491",
+    email: "info@happylamb.in",
+    image: mumbaiStudioImg,
+    headName: "Dilip Gupta",
+    headRole: "Founder & CEO",
+    headImage: mumbaiHeadImg,
+    headQuote: "Mumbai is our creative powerhouse. From here, we oversee the largest productions, ensuring every frame meets the highest standards of cinematic excellence.",
+  },
+  {
+    city: "Patna",
+    address: "WorkSpace - Co-Working Space in Patna, 2nd Floor, Kanti Factory Rd, above Drug Point, near Bank of Baroda, New Colony, Mahatma Gandhi Nagar, Kankarbagh, Patna, Bihar 800020",
+    phone: "+91 6207462473",
+    email: "ankit@happylamb.co.in",
+    image: patnaStudioImg,
+    headName: "Ankit Kumar",
+    headRole: "Studio Head - Patna",
+    headImage: patnaHeadImg,
+    headQuote: "Patna represents our commitment to pan-India reach. We bring world-class production values to the heart of Bihar, empowering local brands and stories.",
+  },
 ];
+
+// ═══ 2 STUDIO CAROUSEL COMPONENT ═══
+function StudioCarousel() {
+  const [current, setCurrent] = useState(0);
+  
+  const visuals = [
+    { src: mumbaiStudioImg, alt: "Mumbai Studio" },
+    { src: patnaStudioImg, alt: "Patna Studio" },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % visuals.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [visuals.length]);
+
+  return (
+    <div className="relative w-full h-[350px] sm:h-[450px] rounded-2xl overflow-hidden border border-border/40 shadow-xl">
+      <AnimatePresence>
+        <motion.div
+          key={current}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="absolute inset-0"
+        >
+          <img
+            src={visuals[current].src}
+            alt={visuals[current].alt}
+            className="w-full h-full object-cover grayscale-[10%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-medium text-white">
+            {visuals[current].alt}
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Navigation Dots */}
+      <div className="absolute bottom-6 right-6 flex gap-1.5">
+        {visuals.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`h-1.5 rounded-full transition-all duration-500 ${
+              i === current ? 'w-6 bg-white' : 'w-1.5 bg-white/40'
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 /* ──────────────────────────────────── COMPONENT ──────────────────────────────────── */
 
 function About() {
   return (
     <>
-      {/* ═══════════════ HERO ═══════════════ */}
-      <section className="relative overflow-hidden pt-36 pb-20">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{ background: "var(--gradient-soft)" }}
-          aria-hidden
-        />
-        <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal>
-            <p className="eyebrow">About HappyLamb Production</p>
-            <h1 className="display-xl mt-4 max-w-5xl text-[clamp(2.6rem,6.5vw,5rem)] leading-[1.05]">
-              A production studio built on craft, contracts and credibility
-            </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
-              HappyLamb Production is a full-service advertising, film production and branding
-              studio headquartered in India. We conceive the idea, produce it to broadcast
-              standards, finish it in-house and deploy it with measurable intent. Since 2016,
-              we've delivered over 100 projects for 50+ brands across 10 industries — without
-              missing a single deadline.
-            </p>
-          </Reveal>
-
-          <div className="mt-12 grid gap-4 lg:grid-cols-3">
-            <Reveal
-              delay={0.1}
-              className="overflow-hidden rounded-[2rem] border border-border shadow-lift lg:col-span-2"
-            >
-              <img
-                src={heroStudio}
-                alt="Studio floor — cameras, lighting rigs and grip equipment at HappyLamb Production"
-                width={1600}
-                height={1008}
-                className="h-[320px] w-full object-cover sm:h-[480px] lg:h-[540px]"
-              />
-            </Reveal>
-            <Reveal
-              delay={0.18}
-              className="flex flex-col justify-between rounded-[2rem] border border-border bg-card p-8 shadow-soft"
-            >
-              <div>
-                <p className="eyebrow">At a glance</p>
-                <ul className="mt-5 space-y-4">
-                  {[
-                    "Founded in 2016 — 9+ years in operation",
-                    "Headquarters: Mumbai, India",
-                    "Active across 28 Indian states",
-                    "Full-time crew of 35+ specialists",
-                    "In-house post-production suite",
-                    "Dedicated compliance & permits cell",
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+      {/* ═══════════════ 1. HERO SECTION (EXACT IMAGE MATCH + RIGHT CAROUSEL) ═══════════════ */}
+      <section className="relative overflow-hidden min-h-[60vh] flex items-center pt-28 pb-16 bg-background border-b border-border/40">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* LEFT: Text Content */}
+            <Reveal>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-px w-8 bg-primary/50"></div>
+                <p className="text-[10px] tracking-[0.4em] text-foreground/50 uppercase font-medium">
+                  Est. 2016
+                </p>
               </div>
-              <Link
-                to="/contact"
-                className="mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-ink px-6 py-3 font-heading text-[0.7rem] tracking-[0.2em] text-ink-foreground uppercase hover:bg-primary"
-              >
-                Start a conversation <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
+              
+              <h1 className="text-[clamp(3.5rem,9vw,6rem)] leading-[0.95] tracking-tighter font-medium text-foreground max-w-4xl">
+                Craft, contracts <br />
+                <span className="italic text-muted-foreground/60">& credibility.</span>
+              </h1>
+              
+              <p className="mt-8 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
+                HappyLamb is a full-service advertising, film production and branding studio based in India. 
+                We conceive the idea, produce it to broadcast standards, finish it in-house, and deploy it with measurable intent.
+              </p>
+            </Reveal>
+
+            {/* RIGHT: 2 Studio Carousel */}
+            <Reveal delay={0.2}>
+              <StudioCarousel />
+              <div className="mt-4 flex justify-center gap-6 text-xs text-muted-foreground tracking-wider uppercase">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary/60" />
+                  Mumbai
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary/60" />
+                  Patna
+                </span>
+              </div>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ COUNTERS ═══════════════ */}
-      <section className="border-y border-border bg-surface py-16">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-2 gap-8 px-5 sm:px-8 lg:grid-cols-4">
-          <Counter to={100} suffix="+" label="Projects delivered" />
-          <Counter to={50} suffix="+" label="Brands served" />
-          <Counter to={10} suffix="+" label="Industries covered" />
-          <Counter to={300} suffix="+" label="Permissions cleared" />
-        </div>
-      </section>
-
-      {/* ═══════════════ FOUNDER NOTE ═══════════════ */}
-      <section className="py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <div className="grid items-start gap-12 lg:grid-cols-[320px_1fr]">
-            <Reveal>
-              <div className="rounded-3xl border border-border bg-card p-8 shadow-soft">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <Users className="h-7 w-7" />
+      {/* ═══════════════ 2. FOUNDER NOTE (PHOTO ADDED) ═══════════════ */}
+      <section className="bg-ink py-28 text-ink-foreground relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        <div className="relative mx-auto max-w-[1400px] px-6 sm:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            
+            {/* Left: Founder Profile (WITH PHOTO) */}
+            <Reveal className="lg:col-span-4 flex flex-col">
+              {/* Orange Line + Label */}
+              <div className="relative pl-6 border-l-2 border-primary mb-4">
+                <div className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-primary" />
+                  <span className="text-xs tracking-[0.2em] text-ink-foreground/40 uppercase">From the founder</span>
                 </div>
-                <h3 className="mt-5 font-heading text-lg tracking-wide uppercase">
-                  From the founders
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Why we started this studio — and why we're still obsessing over every frame.
-                </p>
-                <div className="mt-6 border-t border-border pt-5">
-                  <p className="font-heading text-sm tracking-wide">Founding Team</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Creative Director & Producer
+              </div>
+              
+              {/* ✅ FOUNDER PHOTO ADDED */}
+              <div className="flex items-center gap-4 pl-6">
+                <img
+                  src={m1}
+                  alt="Dilip Gupta"
+                  className="h-14 w-14 rounded-full object-cover border-2 border-primary/30"
+                />
+                <div>
+                  <h3 className="text-xl font-medium tracking-tight">Dilip Gupta</h3>
+                  <p className="text-sm text-ink-foreground/60">
+                    Founder & CEO, HappyLamb Production
                   </p>
                 </div>
               </div>
             </Reveal>
 
-            <Reveal delay={0.1}>
-              <blockquote className="border-l-4 border-primary pl-6 text-lg leading-relaxed text-muted-foreground sm:text-xl">
-                "We started HappyLamb because we kept seeing the same problem: mid-market Indian
-                brands were paying for advertising that looked like it was made on a spreadsheet,
-                not on a set. The strategy was sound but the craft was missing. The idea was right
-                but the execution couldn't carry it. We wanted to close that gap — not by charging
-                agency-level fees, but by building a studio where efficiency and craft aren't
-                opposites."
+            {/* Right: Quote */}
+            <Reveal delay={0.1} className="lg:col-span-8">
+              <blockquote className="text-2xl sm:text-3xl md:text-4xl leading-tight font-light text-ink-foreground/90">
+                "We started HappyLamb because mid-market Indian brands were paying for advertising that looked like it was made on a spreadsheet. 
+                <span className="font-medium text-white italic"> The strategy was sound, but the craft was missing.</span> We built a studio where efficiency and craft aren't opposites."
               </blockquote>
-              <div className="mt-8 space-y-4 text-base leading-relaxed text-muted-foreground">
-                <p>
-                  Over nine years we've built a production infrastructure that most studios our
-                  size outsource: our own lighting and grip inventory, a colour-graded screening
-                  room, a dedicated compliance desk that handles everything from municipal
-                  shooting permits to CBFC censorship submissions, and a post-production pipeline
-                  that now incorporates AI-assisted workflows without ever letting a machine make
-                  a creative decision.
-                </p>
-                <p>
-                  The result is a studio where a brand can walk in with a brief and walk out with
-                  broadcast-ready assets — strategy, shoot, finish and deployment — without ever
-                  talking to a third party. That's not a marketing line. It's how our P&L is
-                  structured.
-                </p>
+              <div className="mt-8 flex items-center gap-6">
+                <div className="w-px h-8 bg-ink-foreground/20"></div>
+                <p className="text-sm text-ink-foreground/50">Creative Director & Producer</p>
               </div>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ MISSION & VISION ═══════════════ */}
-      <section className="bg-surface py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal className="text-center">
-            <p className="eyebrow">What drives us</p>
-            <h2 className="display-xl mt-4 text-[clamp(2rem,5vw,3.6rem)]">
-              Mission & Vision
-            </h2>
+      {/* ═══════════════ 3. VALUES & TIMELINE (Clean Split) ═══════════════ */}
+      <section className="py-28 bg-background">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+          
+          {/* Values Grid */}
+          <Reveal className="mb-24">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">Our Core</p>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight mb-12">Principles we don't compromise on.</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              {VALUES.map((v, i) => (
+                <Reveal key={v.title} delay={i * 0.1} className="group">
+                  <div className="flex flex-col border-t-2 border-primary/20 pt-6 transition-all duration-300 group-hover:border-primary">
+                    <div className="mb-4">
+                      <v.icon className="h-6 w-6 text-foreground/60 group-hover:text-primary transition-colors" />
+                    </div>
+                    <h4 className="font-medium text-lg tracking-tight mb-2">{v.title}</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{v.text}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
           </Reveal>
-          <div className="mt-14 grid gap-8 lg:grid-cols-2">
-            <Reveal delay={0.08}>
-              <div className="h-full rounded-3xl border border-border bg-card p-10 shadow-soft">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                  <Target className="h-5 w-5 text-primary" />
-                </div>
-                <h3 className="mt-6 font-heading text-xl tracking-wide uppercase">Our Mission</h3>
-                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                  To deliver advertising craft that punches above a brand's category and budget —
-                  combining the operational discipline of a producer with the aesthetic standards
-                  of a creative director. Every project, regardless of scale, receives the same
-                  process rigour and quality gates.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.16}>
-              <div className="h-full rounded-3xl border border-border bg-card p-10 shadow-soft">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                  <Rocket className="h-5 w-5 text-primary" />
-                </div>
-                <h3 className="mt-6 font-heading text-xl tracking-wide uppercase">Our Vision</h3>
-                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                  To be the first-call production partner for national brands and international
-                  productions operating in India — a studio known not for the size of its office
-                  but for the reliability of its output, the depth of its infrastructure and the
-                  consistency of its craft.
-                </p>
-              </div>
-            </Reveal>
-          </div>
+
+          {/* Minimal Timeline */}
+          <Reveal>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">OUR JOURNEY</p>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight mb-16">How we got here.</h2>
+
+            <div className="relative border-l border-primary/30 ml-3 sm:ml-6 space-y-12">
+              {TIMELINE.map((t, i) => (
+                <Reveal key={t.year} delay={i * 0.05}>
+                  <div className="relative pl-8 sm:pl-12 -top-1.5">
+                    {/* Dot */}
+                    <div className="absolute left-[-5px] sm:left-[-9px] top-1 h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 rounded-full bg-primary"></div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-2 sm:gap-8">
+                      <span className="font-mono text-xl text-primary font-light">{t.year}</span>
+                      <div>
+                        <h4 className="font-medium text-lg text-foreground tracking-tight">{t.title}</h4>
+                        <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-2xl">{t.text}</p>
+                      </div>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ═══════════════ CORE VALUES ═══════════════ */}
-      <section className="py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal>
-            <p className="eyebrow">Core values</p>
-            <h2 className="display-xl mt-4 text-[clamp(2rem,5vw,3.6rem)]">
-              Principles we don't negotiate
-            </h2>
-            <p className="mt-4 max-w-2xl text-muted-foreground">
-              These aren't posters on a wall. They're the criteria we use when hiring, when
-              accepting a brief and when deciding whether a cut is ready to ship.
+      {/* ═══════════════ 4. WORKFLOW / PROCESS ═══════════════ */}
+      <section className="bg-surface/30 py-28 border-y border-border/40">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+          <Reveal className="flex flex-col md:flex-row justify-between items-end mb-16 pb-8 border-b border-border/40">
+            <div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase mb-2">WORKFLOW</p>
+              <h2 className="text-4xl md:text-5xl font-medium tracking-tight">Six steps. Zero surprises.</h2>
+            </div>
+            <p className="max-w-md text-sm text-muted-foreground mt-4 md:mt-0">
+              Every project follows this exact process. No shortcuts, no skipped stages. 
+              This rigour is why our deadlines hold.
             </p>
           </Reveal>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {VALUES.map((v, i) => (
-              <Reveal key={v.title} delay={i * 0.07}>
-                <div className="h-full rounded-3xl border border-border bg-card p-7 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift">
-                  <v.icon className="h-6 w-6 text-primary" />
-                  <h3 className="mt-5 font-heading text-base tracking-wide uppercase">
-                    {v.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{v.text}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12">
+            {PROCESS.map((p, i) => (
+              <Reveal key={p.step} delay={i * 0.06}>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="text-6xl font-light tracking-tighter text-muted-foreground/30">{p.step}</span>
+                    <div className="h-px flex-1 bg-border/30"></div>
+                  </div>
+                  <h4 className="font-medium text-lg tracking-tight mb-2">{p.title}</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed pr-4">{p.text}</p>
                 </div>
               </Reveal>
             ))}
@@ -397,25 +418,103 @@ function About() {
         </div>
       </section>
 
-      {/* ═══════════════ TIMELINE ═══════════════ */}
-      <section className="bg-surface py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal>
-            <p className="eyebrow">Our journey</p>
-            <h2 className="display-xl mt-4 text-[clamp(2rem,5vw,3.6rem)]">
-              Nine years, one obsession
-            </h2>
+      {/* ═══════════════ 5. CAPABILITIES (Clean Grid) ═══════════════ */}
+      <section className="py-28 bg-background">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+          <Reveal className="mb-12">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">Services</p>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight">Full-service capabilities.</h2>
           </Reveal>
-          <div className="mt-14 space-y-0">
-            {TIMELINE.map((t, i) => (
-              <Reveal key={t.year} delay={i * 0.05}>
-                <div className="grid gap-4 border-t border-border py-8 sm:grid-cols-[140px_1fr] sm:gap-10">
-                  <span className="font-display text-3xl text-primary">{t.year}</span>
-                  <div>
-                    <h3 className="font-heading text-lg tracking-wide uppercase">{t.title}</h3>
-                    <p className="mt-2 max-w-2xl leading-relaxed text-muted-foreground">
-                      {t.text}
-                    </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {CAPABILITIES.map((c, i) => (
+              <Reveal key={c.label} delay={i * 0.04}>
+                <div className="group flex items-center gap-4 border-b border-border/50 py-5 transition-all duration-300 hover:border-foreground/30 hover:pl-2">
+                  <c.icon className="h-5 w-5 shrink-0 text-foreground/40 group-hover:text-primary transition-colors" />
+                  <span className="text-sm font-medium leading-snug text-foreground/80 group-hover:text-foreground transition-colors">{c.label}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 6. STUDIOS SECTION ═══════════════ */}
+      <section className="py-28 bg-surface/30 border-y border-border/40">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+          <Reveal className="text-center max-w-3xl mx-auto mb-16">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">Our Studios</p>
+              <div className="h-px w-6 bg-border"></div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight">
+              Mumbai <span className="text-muted-foreground/40">·</span> Patna
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+              Two production hubs. Pan-India crew and permissions capability. World-class craft, delivered locally.
+            </p>
+          </Reveal>
+
+          <div className="grid gap-12 lg:grid-cols-2">
+            {STUDIOS.map((studio, i) => (
+              <Reveal key={studio.city} delay={i * 0.1}>
+                <div className="group bg-background border border-border/40 rounded-2xl overflow-hidden shadow-sm transition-all hover:shadow-lg hover:-translate-y-1">
+                  {/* Studio Photo */}
+                  <div className="relative h-64 overflow-hidden">
+                    <img
+                      src={studio.image}
+                      alt={`${studio.city} Studio`}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-4 left-4">
+                      <span className="inline-flex items-center gap-2 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
+                        <Building2 className="h-3 w-3" />
+                        {studio.city} Studio
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-8">
+                    {/* Studio Details */}
+                    <div className="space-y-3 text-sm text-muted-foreground border-b border-border/30 pb-6">
+                      <div className="flex items-start gap-3">
+                        <MapPin className="h-4 w-4 shrink-0 text-foreground/60 mt-0.5" />
+                        <span>{studio.address}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Phone className="h-4 w-4 shrink-0 text-foreground/60" />
+                        <span>{studio.phone}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Mail className="h-4 w-4 shrink-0 text-foreground/60" />
+                        <span>{studio.email}</span>
+                      </div>
+                    </div>
+
+                    {/* Studio Head */}
+                    <div className="mt-6 flex items-center gap-4">
+                      <img
+                        src={studio.headImage}
+                        alt={studio.headName}
+                        className="h-14 w-14 rounded-full object-cover border-2 border-border/40"
+                      />
+                      <div>
+                        <p className="font-medium text-sm">{studio.headName}</p>
+                        <p className="text-xs text-muted-foreground">{studio.headRole}</p>
+                      </div>
+                    </div>
+
+                    {/* Studio Head Quote */}
+                    <div className="mt-4 pl-4 border-l-2 border-primary/30">
+                      <p className="text-sm italic text-muted-foreground/80 leading-relaxed">
+                        "{studio.headQuote}"
+                      </p>
+                    </div>
                   </div>
                 </div>
               </Reveal>
@@ -424,169 +523,76 @@ function About() {
         </div>
       </section>
 
-      {/* ═══════════════ CAPABILITIES GRID ═══════════════ */}
-      <section className="py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal>
-            <p className="eyebrow">What we do</p>
-            <h2 className="display-xl mt-4 text-[clamp(2rem,5vw,3.6rem)]">
-              Full-service capabilities
-            </h2>
-            <p className="mt-4 max-w-2xl text-muted-foreground">
-              Every service below is delivered by our in-house team — no freelancers, no
-              sub-contracted agencies, no accountability gaps.
-            </p>
-          </Reveal>
-          <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {CAPABILITIES.map((c, i) => (
-              <Reveal key={c.label} delay={i * 0.04}>
-                <div className="flex items-center gap-3 rounded-2xl border border-border bg-card px-5 py-4 shadow-soft transition-colors duration-300 hover:border-primary/30 hover:bg-primary/5">
-                  <c.icon className="h-5 w-5 shrink-0 text-primary" />
-                  <span className="text-sm font-medium leading-snug">{c.label}</span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ WHY CHOOSE US ═══════════════ */}
-      <section className="bg-surface py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal>
-            <p className="eyebrow">Why brands choose us</p>
-            <h2 className="display-xl mt-4 text-[clamp(2rem,5vw,3.6rem)]">
-              Four reasons clients stay
-            </h2>
-          </Reveal>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {WHY.map((w, i) => (
-              <Reveal key={w.title} delay={i * 0.07}>
-                <div className="h-full rounded-3xl border border-border bg-card p-7 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift">
-                  <w.icon className="h-6 w-6 text-primary" />
-                  <h3 className="mt-5 font-heading text-base tracking-wide uppercase">
-                    {w.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{w.text}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ PROCESS ═══════════════ */}
-      <section className="bg-ink py-24 text-ink-foreground">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal>
-            <p className="eyebrow text-ink-foreground/60">Production process</p>
-            <h2 className="display-xl mt-4 text-[clamp(2rem,5vw,3.6rem)]">
-              Six steps, zero surprises
-            </h2>
-            <p className="mt-4 max-w-2xl text-ink-foreground/70">
-              Every project follows this exact process. No shortcuts, no skipped stages. This
-              rigour is why our deadlines hold.
-            </p>
-          </Reveal>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {PROCESS.map((p, i) => (
-              <Reveal key={p.step} delay={i * 0.06}>
-                <div className="rounded-2xl border border-ink-foreground/12 p-7">
-                  <span className="font-display text-3xl text-primary">{p.step}</span>
-                  <h3 className="mt-3 font-heading text-sm tracking-wide uppercase">
-                    {p.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-ink-foreground/65">
-                    {p.text}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ CERTIFICATIONS ═══════════════ */}
-      <section className="py-20">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal className="text-center">
-            <p className="eyebrow">Trust & compliance</p>
-            <h2 className="display-xl mt-4 text-2xl sm:text-3xl">
-              Registered, certified and insured
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="mt-10 flex flex-wrap justify-center gap-3">
-              {CERTIFICATIONS.map((cert) => (
-                <span
-                  key={cert}
-                  className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-xs font-medium tracking-wide text-muted-foreground shadow-soft"
-                >
-                  <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-                  {cert}
-                </span>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ═══════════════ TEAM CTA ═══════════════ */}
-      <section className="border-t border-border py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal className="overflow-hidden rounded-[2rem] border border-border shadow-lift">
-            <img
-              src={teamGroup}
-              alt="The HappyLamb Production crew on set"
-              width={1920}
-              height={912}
-              loading="lazy"
-              className="w-full object-cover"
-            />
-          </Reveal>
-          <Reveal delay={0.1} className="mt-10 flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <h2 className="display-xl text-[clamp(1.8rem,4vw,3rem)]">
-                The people behind the work
+      {/* ═══════════════ 7. TEAM SECTION (GROUP PHOTO + BUTTON) ═══════════════ */}
+      <section className="py-28 bg-background border-b border-border/40">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            {/* Left: Text & Button */}
+            <Reveal className="flex flex-col">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="h-px w-6 bg-border"></div>
+                <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">The Team</p>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-medium tracking-tight leading-tight mb-6">
+                The people behind <br />
+                <span className="italic text-foreground/60">the work.</span>
               </h2>
-              <p className="mt-3 max-w-xl text-muted-foreground">
-                35+ full-time specialists — directors, DOPs, editors, designers, producers and
-                strategists — united by an unreasonable standard of craft.
+              <p className="text-base text-muted-foreground leading-relaxed max-w-lg mb-10">
+                Directors, DOPs, editors, designers, producers, and strategists — 35+ full-time specialists 
+                united by an unreasonable standard of craft.
               </p>
-            </div>
-            <Link
-              to="/team"
-              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-ink px-7 py-3.5 font-heading text-[0.75rem] tracking-[0.2em] text-ink-foreground uppercase hover:bg-primary"
-            >
-              Meet the team <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Reveal>
+              
+              <Link
+                to="/team"
+                className="inline-flex w-fit items-center gap-3 bg-ink text-ink-foreground px-8 py-3.5 rounded-full text-sm font-medium tracking-wide hover:bg-primary hover:text-ink transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+              >
+                Meet the team <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Reveal>
+
+            {/* Right: Group Photo */}
+            <Reveal delay={0.1}>
+              <div className="relative overflow-hidden rounded-2xl border border-border/40 shadow-xl group">
+                <img
+                  src={teamGroup}
+                  alt="The HappyLamb Production Crew"
+                  width={1200}
+                  height={800}
+                  loading="lazy"
+                  className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-[1.03] grayscale-[10%] group-hover:grayscale-0"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none"></div>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* ═══════════════ BOTTOM CTA ═══════════════ */}
-      <section className="bg-ink py-24 text-ink-foreground">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 text-center">
+      {/* ═══════════════ 8. FINAL BOTTOM CTA ═══════════════ */}
+      <section className="bg-ink py-32 text-ink-foreground relative overflow-hidden text-center">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
+        <div className="relative mx-auto max-w-4xl px-6">
           <Reveal>
-            <h2 className="display-xl text-[clamp(2rem,5vw,3.6rem)]">
-              Ready to work with a studio that delivers?
+            <h2 className="text-5xl md:text-6xl font-medium tracking-tight leading-tight">
+              Ready to build something <br />
+              <span className="italic text-ink-foreground/40">worth watching</span>?
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-ink-foreground/70">
-              Whether it's a single product shoot or a full brand launch — let's talk about what
-              you need, not what we want to sell.
+            <p className="mx-auto mt-6 max-w-xl text-ink-foreground/60 text-lg">
+              Whether it's a single product shoot or a full brand launch — let's talk about what you need.
             </p>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 font-heading text-[0.75rem] tracking-[0.2em] text-ink uppercase hover:bg-primary/90"
+                className="inline-flex items-center gap-3 bg-primary text-ink px-10 py-4 rounded-full text-sm font-medium tracking-wide hover:bg-primary/90 hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/20"
               >
-                Get a quote <ArrowRight className="h-4 w-4" />
+                Start a project <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/work"
-                className="inline-flex items-center gap-2 rounded-full border border-ink-foreground/20 px-8 py-4 font-heading text-[0.75rem] tracking-[0.2em] text-ink-foreground uppercase hover:border-ink-foreground/50"
+                className="inline-flex items-center gap-2 text-sm text-ink-foreground/60 hover:text-ink-foreground transition-colors"
               >
-                View our work
+                View portfolio
               </Link>
             </div>
           </Reveal>

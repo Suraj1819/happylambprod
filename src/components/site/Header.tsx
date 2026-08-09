@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logo from "@/assets/logo.png";
+
+// ✅ यहाँ सिर्फ एक लाइन बदली गई है
+import logo from "@/assets/brands/hello.png";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -36,15 +38,16 @@ export function Header() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
           scrolled || open
-            ? "border-b border-border/50 bg-background/90 backdrop-blur-md shadow-sm"
+            ? "border-b border-border/40 bg-background/90 backdrop-blur-md shadow-sm"
             : "bg-background/70 backdrop-blur-sm"
         }`}
       >
-        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 sm:h-[4.25rem] sm:px-8">
-          {/* Logo */}
+        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6 sm:h-[4.25rem] sm:px-10">
+          
+          {/* Logo (अब यह brands/hello.png से आएगा) */}
           <Link
             to="/"
-            className="flex items-center gap-2.5"
+            className="flex items-center gap-3 group"
             onClick={() => setOpen(false)}
           >
             <img
@@ -52,27 +55,27 @@ export function Header() {
               alt="HappyLamb Production"
               width={36}
               height={36}
-              className="h-9 w-9"
+              className="h-9 w-9 transition-transform duration-300 group-hover:scale-105"
             />
-            <span className="leading-none">
-              <span className="block font-display text-xl tracking-wide text-foreground sm:text-[1.35rem]">
+            <div className="leading-none">
+              <span className="block font-medium text-lg tracking-tight text-foreground sm:text-xl">
                 HappyLamb
               </span>
-              <span className="block font-heading text-[0.55rem] tracking-[0.38em] text-muted-foreground uppercase">
+              <span className="block text-[0.55rem] tracking-[0.35em] text-muted-foreground uppercase mt-0.5">
                 Production
               </span>
-            </span>
+            </div>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden items-center gap-0.5 lg:flex">
+          {/* Desktop Navigation */}
+          <nav className="hidden items-center gap-1 lg:flex">
             {NAV.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
                 activeOptions={{ exact: item.to === "/" }}
-                activeProps={{ className: "text-primary bg-primary/10" }}
-                className="rounded-full px-3.5 py-2 font-heading text-[0.72rem] tracking-[0.15em] text-foreground/75 uppercase transition-all duration-200 hover:bg-primary/5 hover:text-primary"
+                activeProps={{ className: "text-foreground bg-foreground/5" }}
+                className="rounded-full px-4 py-2 text-[0.7rem] tracking-[0.15em] text-muted-foreground uppercase transition-all duration-200 hover:bg-foreground/5 hover:text-foreground"
               >
                 {item.label}
               </Link>
@@ -80,10 +83,10 @@ export function Header() {
           </nav>
 
           {/* CTA + Hamburger */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <Link
               to="/contact"
-              className="hidden rounded-full bg-primary px-5 py-2.5 font-heading text-[0.68rem] tracking-[0.18em] text-primary-foreground uppercase shadow-glow transition-all duration-300 hover:scale-[1.03] sm:inline-flex"
+              className="hidden rounded-full bg-ink px-6 py-2.5 text-[0.7rem] tracking-[0.18em] text-ink-foreground uppercase transition-all duration-300 hover:bg-primary hover:text-ink hover:shadow-lg hover:scale-105 sm:inline-flex"
             >
               Hire Us
             </Link>
@@ -92,7 +95,7 @@ export function Header() {
               type="button"
               aria-label={open ? "Close menu" : "Open menu"}
               onClick={() => setOpen((v) => !v)}
-              className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground transition-colors duration-200 hover:border-primary hover:text-primary lg:hidden"
+              className="grid h-10 w-10 place-items-center rounded-full border border-border/60 text-foreground/60 transition-colors duration-200 hover:border-primary/50 hover:text-foreground lg:hidden"
             >
               {open ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
             </button>
@@ -102,16 +105,16 @@ export function Header() {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="fixed inset-0 z-40 flex flex-col bg-background/95 backdrop-blur-lg lg:hidden">
+        <div className="fixed inset-0 z-40 flex flex-col bg-background/98 backdrop-blur-xl lg:hidden">
           <div className="h-16 shrink-0 sm:h-[4.25rem]" />
 
-          <nav className="flex flex-1 flex-col items-center justify-center gap-1.5 px-6">
+          <nav className="flex flex-1 flex-col items-center justify-center gap-2 px-6">
             {NAV.map((item, i) => (
               <Link
                 key={item.to}
                 to={item.to}
                 onClick={() => setOpen(false)}
-                className="w-full max-w-[280px] rounded-xl border border-border/60 py-3.5 text-center font-heading text-[0.85rem] tracking-[0.2em] uppercase text-foreground/80 transition-all duration-200 hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                className="w-full max-w-xs rounded-xl border border-border/30 py-4 text-center text-[0.8rem] tracking-[0.2em] uppercase text-foreground/70 transition-all duration-200 hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
                 style={{
                   animation: "fadeSlideUp 0.35s ease both",
                   animationDelay: `${i * 40}ms`,
@@ -120,18 +123,23 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-          </nav>
-
-          <div className="flex shrink-0 flex-col items-center gap-3 px-6 pb-10">
+            
             <Link
               to="/contact"
               onClick={() => setOpen(false)}
-              className="inline-flex w-full max-w-[280px] items-center justify-center rounded-full bg-primary px-7 py-3.5 font-heading text-[0.72rem] tracking-[0.18em] text-primary-foreground uppercase shadow-glow"
+              className="mt-4 w-full max-w-xs rounded-full bg-ink px-7 py-4 text-center text-[0.7rem] tracking-[0.18em] text-ink-foreground uppercase transition-all duration-300 hover:bg-primary hover:text-ink"
+              style={{
+                animation: "fadeSlideUp 0.35s ease both",
+                animationDelay: `${NAV.length * 40}ms`,
+              }}
             >
               Hire Us
             </Link>
-            <p className="text-center text-[0.65rem] tracking-[0.18em] text-muted-foreground uppercase">
-              Mumbai · Patna
+          </nav>
+
+          <div className="flex shrink-0 justify-center pb-10">
+            <p className="text-[0.55rem] tracking-[0.2em] text-muted-foreground uppercase">
+              Crafted with precision
             </p>
           </div>
         </div>
@@ -141,7 +149,7 @@ export function Header() {
         @keyframes fadeSlideUp {
           from {
             opacity: 0;
-            transform: translateY(12px);
+            transform: translateY(16px);
           }
           to {
             opacity: 1;

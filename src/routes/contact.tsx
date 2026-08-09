@@ -25,20 +25,20 @@ export const Route = createFileRoute("/contact")({
 const STUDIOS = [
   {
     city: "Mumbai",
-    address: "Studio 04, Creative Quarter, Andheri West, Mumbai 400053",
+    address: "Happy Lamb Production OPC PVT.LTD, 505, 5th Floor, Bhoomi Building, Sanjay Nagar Co.Op. Society, Cama Estate, Behind Future Studio, Goregoan (E.), Mumbai - 400063",
     mapEmbed:
-      "https://www.google.com/maps?q=Andheri+West+Mumbai&output=embed",
-    mapsUrl: "https://www.google.com/maps/search/?api=1&query=Andheri+West+Mumbai",
-    phone: "+91 98765 43210",
-    phoneRaw: "919876543210",
-    email: "mumbai@happylambproduction.com",
-    whatsapp: "919876543210",
+      "https://www.google.com/maps?q=Goregoan+East+Mumbai&output=embed",
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=Happy+Lamb+Production+Goregoan+East+Mumbai",
+    phone: "+91 9820778491",
+    phoneRaw: "919820778491",
+    email: "info@happylamb.in",
+    whatsapp: "919820778491",
   },
   {
     city: "Patna",
     address: "WorkSpace - Co-Working Space in Patna, 2nd Floor, Kanti Factory Rd, above Drug Point, near Bank of Baroda, New Colony, Mahatma Gandhi Nagar, Kankarbagh, Patna, Bihar 800020",
     mapEmbed:
-      "https://www.google.com/maps?q=Boring+Road+Patna&output=embed",
+      "https://www.google.com/maps?q=Kankarbagh+Patna&output=embed",
     mapsUrl: "https://maps.app.goo.gl/p3Aux8ziTfCXWDMV8",
     phone: "+91 6207462473",
     phoneRaw: "916207462473",
@@ -63,7 +63,7 @@ type FormValues = z.infer<typeof schema>;
 const BUDGETS = ["Under ₹1 Lakh", "₹1–5 Lakh", "₹5–15 Lakh", "₹15 Lakh+", "Not sure yet"];
 
 const field =
-  "mt-1.5 w-full rounded-lg border border-border bg-background px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary/20";
+  "mt-1.5 w-full rounded-lg border border-border/40 bg-background px-4 py-3 text-sm outline-none transition focus:border-foreground/30 focus:ring-1 focus:ring-foreground/10";
 
 // ============== PREMIUM TOAST ==============
 const showSuccessToast = (name: string, studio: string) => {
@@ -74,18 +74,18 @@ const showSuccessToast = (name: string, studio: string) => {
         <span className="font-semibold text-foreground">Thanks {name}!</span>
       </div>
       <p className="text-sm text-muted-foreground">
-        We'll reply within one working day from our <span className="font-medium text-primary">{studio}</span> studio.
+        We'll reply within one working day from our <span className="font-medium text-foreground">{studio}</span> studio.
       </p>
       <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground/60">
-        <Sparkles className="h-3 w-3 text-primary" />
+        <Sparkles className="h-3 w-3 text-muted-foreground/60" />
         <span>We'll reach out to you shortly</span>
       </div>
     </div>,
     {
       duration: 5000,
       position: "top-center",
-      className: "!bg-background !border !border-primary/20 !shadow-2xl !shadow-primary/10 !rounded-2xl !p-4",
-      icon: <CheckCircle className="h-5 w-5 text-primary" />,
+      className: "!bg-background !border !border-border/40 !shadow-2xl !shadow-border/10 !rounded-2xl !p-4",
+      icon: <CheckCircle className="h-5 w-5 text-muted-foreground/60" />,
     }
   );
 };
@@ -106,25 +106,32 @@ function Contact() {
   };
 
   return (
-    <section className="pt-28 pb-20 sm:pt-32">
-      <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
-        {/* Header */}
-        <Reveal className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">
-            Contact
-          </p>
-          <h1 className="mt-3 font-display text-4xl font-bold tracking-tight sm:text-5xl">
-            Let's talk about your next film
+    <section className="pt-28 pb-20 sm:pt-32 bg-background">
+      <div className="mx-auto max-w-[1200px] px-6 sm:px-10">
+        
+        {/* ═══════════════ 1. HEADER (SYMMETRIC - BOLD + ITALIC) ═══════════════ */}
+        <Reveal className="max-w-3xl mb-12">
+          {/* Tiny Divider */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="h-px w-8 bg-border/50"></div>
+            <p className="text-xs tracking-[0.3em] text-muted-foreground/80 uppercase font-medium">Contact</p>
+          </div>
+          
+          <h1 className="text-[clamp(2.5rem,6.5vw,4.5rem)] leading-[0.95] tracking-tighter font-medium text-foreground">
+            Let's talk <br />
+            <span className="italic text-muted-foreground/60">about your next film.</span>
           </h1>
-          <p className="mt-4 text-base text-muted-foreground">
-            Share your brief. We'll come back with a clear plan and quote.
+          <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-xl">
+            Share your brief. We'll come back with a clear plan and quote. Crafted with precision.
           </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_360px]">
-          {/* Form */}
+        {/* ═══════════════ 2. FORM & STUDIOS (Clean Split) ═══════════════ */}
+        <div className="grid gap-10 lg:grid-cols-[1fr_380px]">
+          
+          {/* Left: Form (Clean & Minimal) */}
           <Reveal>
-            <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+            <div className="rounded-2xl border border-border/40 bg-surface/30 p-6 sm:p-8 shadow-sm">
               <form onSubmit={handleSubmit(onSubmit)} className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -240,7 +247,7 @@ function Contact() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full rounded-lg bg-primary py-3.5 text-sm font-semibold tracking-wide text-primary-foreground transition hover:opacity-90 disabled:opacity-60 sm:w-auto sm:px-10"
+                    className="w-full rounded-lg bg-ink py-3.5 text-sm font-medium tracking-wide text-ink-foreground transition hover:bg-primary hover:text-ink disabled:opacity-60 sm:w-auto sm:px-10"
                   >
                     {isSubmitting ? "Sending..." : "Send Enquiry"}
                   </button>
@@ -249,58 +256,60 @@ function Contact() {
             </div>
           </Reveal>
 
-          {/* Sidebar — Studios with maps */}
-          <Reveal delay={0.08} className="space-y-5">
+          {/* Right: Studios (Clean Cards) */}
+          <Reveal delay={0.08} className="space-y-6">
             {STUDIOS.map((s) => (
               <div
                 key={s.city}
-                className="overflow-hidden rounded-2xl border border-border bg-card"
+                className="overflow-hidden rounded-2xl border border-border/40 bg-surface/30 shadow-sm"
               >
                 {/* Map */}
-                <div className="relative h-36 w-full">
+                <div className="relative h-32 w-full">
                   <iframe
                     title={`${s.city} Studio map`}
                     src={s.mapEmbed}
                     loading="lazy"
-                    className="h-full w-full border-0"
+                    className="h-full w-full border-0 grayscale-[20%]"
                   />
                 </div>
 
                 {/* Details */}
-                <div className="p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                    {s.city} Studio
+                <div className="p-6">
+                  {/* ✅ FIX: Mumbai Bold + Studio Italic (Gray) */}
+                  <p className="text-xs tracking-[0.2em] uppercase font-medium">
+                    <span className="text-foreground">{s.city}</span>{' '}
+                    <span className="italic text-muted-foreground/60">Studio</span>
                   </p>
 
-                  <div className="mt-3 space-y-2.5 text-sm text-muted-foreground">
+                  <div className="mt-4 space-y-3 text-sm text-muted-foreground">
                     <a
                       href={s.mapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex gap-2.5 transition hover:text-primary"
+                      className="flex gap-3 transition hover:text-foreground"
                     >
-                      <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/60" />
                       <span className="leading-snug">{s.address}</span>
                     </a>
 
                     <a
                       href={`tel:${s.phoneRaw}`}
-                      className="flex items-center gap-2.5 transition hover:text-primary"
+                      className="flex items-center gap-3 transition hover:text-foreground"
                     >
-                      <Phone className="h-3.5 w-3.5 shrink-0 text-primary" />
+                      <Phone className="h-4 w-4 shrink-0 text-muted-foreground/60" />
                       {s.phone}
                     </a>
 
                     <a
                       href={`mailto:${s.email}`}
-                      className="flex items-center gap-2.5 break-all transition hover:text-primary"
+                      className="flex items-center gap-3 break-all transition hover:text-foreground"
                     >
-                      <Mail className="h-3.5 w-3.5 shrink-0 text-primary" />
+                      <Mail className="h-4 w-4 shrink-0 text-muted-foreground/60" />
                       {s.email}
                     </a>
 
-                    <div className="flex items-center gap-2.5">
-                      <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />
+                    <div className="flex items-center gap-3">
+                      <Clock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
                       Mon–Sat · 10am – 7pm
                     </div>
                   </div>
@@ -309,9 +318,9 @@ function Contact() {
                     href={`https://wa.me/${s.whatsapp}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] py-2.5 text-xs font-semibold text-white transition hover:opacity-90"
+                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] py-2.5 text-xs font-medium text-white transition hover:opacity-90"
                   >
-                    <MessageCircle className="h-3.5 w-3.5" />
+                    <MessageCircle className="h-4 w-4" />
                     WhatsApp {s.city}
                   </a>
                 </div>

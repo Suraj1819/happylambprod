@@ -178,11 +178,11 @@ function StatsBar({ results }: { results: { label: string; value: string }[] }) 
   return (
     <div className="grid grid-cols-3 gap-4">
       {results.map((r) => (
-        <div key={r.label} className="text-center">
-          <p className="text-2xl font-display tracking-tight text-primary sm:text-3xl">
+        <div key={r.label} className="text-center border-r border-border/30 last:border-r-0 px-4">
+          <p className="text-3xl font-medium tracking-tight text-foreground">
             {r.value}
           </p>
-          <p className="mt-0.5 text-[10px] text-muted-foreground uppercase tracking-wider">
+          <p className="mt-1 text-[10px] text-muted-foreground/80 uppercase tracking-wider">
             {r.label}
           </p>
         </div>
@@ -200,7 +200,7 @@ function VideoThumbnail({ video, index, onClick }: { video: any; index: number; 
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative overflow-hidden rounded-xl border border-border/30 transition-all hover:shadow-lg hover:border-primary/20"
+      className="group relative overflow-hidden rounded-xl border border-border/30 transition-all hover:shadow-lg hover:border-border/50"
     >
       <img
         src={video.poster || video.thumbnail || "/video-placeholder.jpg"}
@@ -208,7 +208,7 @@ function VideoThumbnail({ video, index, onClick }: { video: any; index: number; 
         loading="lazy"
         className="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
-      <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/30">
+      <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/20">
         <span className="rounded-full bg-white/90 p-3 text-black opacity-0 transition-opacity group-hover:opacity-100 shadow-lg">
           <Play className="h-5 w-5 fill-current" />
         </span>
@@ -269,14 +269,16 @@ function ProjectPage() {
   // Get main video (first one or the one selected)
   const mainVideo = videos[activeVideoIndex] || videos[0];
 
+  // ✅ TITLE SPLIT LOGIC: Title ko dash (`—`) ke hisaab se todna
+  const splitTitle = project.title.includes('—') 
+    ? project.title.split('—') 
+    : [project.title, ''];
+
   return (
     <>
-      {/* ===== HERO ===== */}
-      <section className="relative pt-28 pb-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/3 via-transparent to-transparent" />
-        <div className="absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full bg-primary/3 blur-3xl" />
-        
-        <div className="relative mx-auto max-w-[1100px] px-5 sm:px-8">
+      {/* ===== HERO (SYMMETRIC + GRAY & ITALIC) ===== */}
+      <section className="relative pt-32 pb-8 overflow-hidden bg-background border-b border-border/40">
+        <div className="mx-auto max-w-[1100px] px-6 sm:px-10">
           <Link 
             to="/work" 
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground group"
@@ -286,30 +288,41 @@ function ProjectPage() {
           </Link>
 
           <div className="mt-6">
+            {/* 🚫 REMOVED ORANGE: Category tag is now Gray & Italic */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-primary/10 px-3 py-0.5 text-[10px] font-medium text-primary uppercase tracking-wider">
+              <span className="rounded-full bg-muted/20 px-3 py-0.5 text-[10px] font-medium italic text-muted-foreground/80 uppercase tracking-wider">
                 {project.category}
               </span>
               <span className="text-xs text-muted-foreground">•</span>
               <span className="text-xs text-muted-foreground">{project.year}</span>
             </div>
             
-            <h1 className="mt-3 text-[clamp(2.2rem,5vw,3.8rem)] font-display leading-[1.05] tracking-tight">
-              {project.title}
+            {/* ✅ Heading: 2nd Line is Italic & Gray */}
+            <h1 className="mt-3 text-[clamp(2.2rem,5vw,3.8rem)] font-medium tracking-tight leading-[0.95]">
+              {splitTitle[0].trim()}
+              {splitTitle[1] && (
+                <>
+                  {' '}—{' '}
+                  <span className="italic text-muted-foreground/60">
+                    {splitTitle.slice(1).join('—').trim()}
+                  </span>
+                </>
+              )}
             </h1>
             
-            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+            {/* 🚫 REMOVED ORANGE: Icons and text are now Gray */}
+            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground/80">
               <span className="flex items-center gap-1.5">
-                <Briefcase className="h-3.5 w-3.5 text-primary/60" />
+                <Briefcase className="h-3.5 w-3.5 text-muted-foreground/40" />
                 {project.client}
               </span>
               <span className="flex items-center gap-1.5">
-                <Tag className="h-3.5 w-3.5 text-primary/60" />
+                <Tag className="h-3.5 w-3.5 text-muted-foreground/40" />
                 {project.service}
               </span>
               {hasMultipleVideos && (
                 <span className="flex items-center gap-1.5 text-xs">
-                  <Film className="h-3.5 w-3.5 text-primary/60" />
+                  <Film className="h-3.5 w-3.5 text-muted-foreground/40" />
                   {videos.length} Videos
                 </span>
               )}
@@ -320,7 +333,7 @@ function ProjectPage() {
           <Reveal delay={0.08} className="mt-8">
             {videos.length > 0 ? (
               <div 
-                className="relative cursor-pointer overflow-hidden rounded-2xl border border-border/50 shadow-2xl"
+                className="relative cursor-pointer overflow-hidden rounded-xl border border-border/40 shadow-sm"
                 onClick={() => openLightbox(activeVideoIndex)}
               >
                 <VideoPlayer 
@@ -335,7 +348,7 @@ function ProjectPage() {
               </div>
             ) : (
               <div 
-                className="relative overflow-hidden rounded-2xl border border-border/50 shadow-2xl cursor-pointer group"
+                className="relative overflow-hidden rounded-xl border border-border/40 shadow-sm cursor-pointer group"
                 onClick={() => openLightbox(0)}
               >
                 <img 
@@ -343,7 +356,7 @@ function ProjectPage() {
                   alt={project.title} 
                   className="w-full max-h-[500px] object-cover transition-transform duration-700 group-hover:scale-105" 
                 />
-                <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/30">
+                <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/20">
                   <span className="rounded-full bg-white/90 p-4 text-black opacity-0 transition-opacity group-hover:opacity-100 shadow-xl">
                     <ImageIcon className="h-6 w-6" />
                   </span>
@@ -355,7 +368,7 @@ function ProjectPage() {
           {/* Video Thumbnails - Show if multiple videos */}
           {hasMultipleVideos && (
             <div className="mt-4">
-              <p className="text-xs text-muted-foreground mb-2">More videos from this project</p>
+              <p className="text-xs text-muted-foreground/80 italic mb-2">More videos from this project</p>
               <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6">
                 {videos.map((video, i) => (
                   <button
@@ -363,10 +376,10 @@ function ProjectPage() {
                     onClick={() => {
                       setActiveVideoIndex(i);
                       // Scroll to video
-                      document.querySelector('.rounded-2xl')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      document.querySelector('.rounded-xl')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }}
                     className={`relative overflow-hidden rounded-lg border-2 transition-all ${
-                      i === activeVideoIndex ? 'border-primary' : 'border-border/50 hover:border-primary/50'
+                      i === activeVideoIndex ? 'border-foreground/30' : 'border-border/50 hover:border-border/80'
                     }`}
                   >
                     <img
@@ -378,7 +391,7 @@ function ProjectPage() {
                       <Play className="h-6 w-6 text-white fill-current" />
                     </div>
                     {i === activeVideoIndex && (
-                      <div className="absolute inset-0 ring-2 ring-primary ring-inset" />
+                      <div className="absolute inset-0 ring-2 ring-foreground/30 ring-inset" />
                     )}
                   </button>
                 ))}
@@ -400,15 +413,15 @@ function ProjectPage() {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
-            className="fixed top-0 left-0 right-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-xl px-5 py-3 sm:px-8"
+            className="fixed top-0 left-0 right-0 z-40 border-b border-border/30 bg-background/80 backdrop-blur-md px-6 py-3 sm:px-10"
           >
             <div className="mx-auto max-w-[1100px] flex items-center justify-between">
               <span className="text-sm font-medium truncate">{project.title}</span>
               <div className="flex items-center gap-4">
-                <span className="text-xs text-muted-foreground">{project.client}</span>
+                <span className="text-xs text-muted-foreground/80">{project.client}</span>
                 <Link 
                   to="/contact" 
-                  className="rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground transition-all hover:shadow-lg"
+                  className="rounded-full bg-ink px-4 py-1.5 text-xs font-medium text-ink-foreground transition-all hover:bg-foreground/10"
                 >
                   Enquire
                 </Link>
@@ -418,31 +431,31 @@ function ProjectPage() {
         )}
       </AnimatePresence>
 
-      {/* ===== INFO SECTION ===== */}
-      <section ref={infoRef} className="py-12 border-y border-border/30 bg-surface/10">
-        <div className="mx-auto max-w-[1100px] px-5 sm:px-8">
+      {/* ===== INFO SECTION (SYMMETRIC) ===== */}
+      <section ref={infoRef} className="py-12 border-y border-border/30 bg-surface/20">
+        <div className="mx-auto max-w-[1100px] px-6 sm:px-10">
           <div className="grid gap-8 md:grid-cols-3">
             {[
               { 
                 label: "Objective", 
                 text: project.objective,
-                icon: <Award className="h-4 w-4 text-primary/60" />
+                icon: <Award className="h-4 w-4 text-muted-foreground/40" />
               },
               { 
                 label: "Challenge", 
                 text: project.challenge,
-                icon: <Clock className="h-4 w-4 text-primary/60" />
+                icon: <Clock className="h-4 w-4 text-muted-foreground/40" />
               },
               { 
                 label: "Approach", 
                 text: project.approach,
-                icon: <Sparkles className="h-4 w-4 text-primary/60" />
+                icon: <Sparkles className="h-4 w-4 text-muted-foreground/40" />
               },
             ].map((item, i) => (
-              <div key={item.label} className="space-y-2">
+              <div key={item.label} className="space-y-2 border-l-2 border-foreground/10 pl-4">
                 <div className="flex items-center gap-2">
                   {item.icon}
-                  <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">
+                  <p className="text-[10px] font-medium text-muted-foreground/80 uppercase tracking-widest italic">
                     {item.label}
                   </p>
                 </div>
@@ -456,21 +469,21 @@ function ProjectPage() {
       </section>
 
       {/* ===== FEEDBACK ===== */}
-      <section className="py-16">
-        <div className="mx-auto max-w-[1100px] px-5 sm:px-8">
-          <div className="relative rounded-2xl border border-border/30 bg-surface/10 p-8 md:p-10">
-            <Quote className="absolute -top-3 -left-3 h-8 w-8 rounded-full bg-primary p-1.5 text-primary-foreground" />
-            <div className="pl-4">
+      <section className="py-16 bg-background">
+        <div className="mx-auto max-w-[1100px] px-6 sm:px-10">
+          <div className="relative rounded-xl border border-border/30 bg-surface/20 p-8 md:p-10">
+            <Quote className="absolute -top-3 -left-3 h-8 w-8 rounded-full bg-muted/20 p-1.5 text-muted-foreground" />
+            <div className="pl-4 border-l-2 border-foreground/10">
               <p className="text-base leading-relaxed text-foreground/80 md:text-lg">
                 "{project.feedback.quote}"
               </p>
               <div className="mt-4 flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">
+                <div className="h-10 w-10 rounded-full bg-muted/20 flex items-center justify-center text-muted-foreground font-medium">
                   {project.feedback.author.charAt(0)}
                 </div>
                 <div>
                   <p className="text-sm font-medium">{project.feedback.author}</p>
-                  <p className="text-xs text-muted-foreground">Client Feedback</p>
+                  <p className="text-xs text-muted-foreground/80">Client Feedback</p>
                 </div>
               </div>
             </div>
@@ -478,20 +491,25 @@ function ProjectPage() {
         </div>
       </section>
 
-      {/* ===== GALLERY ===== */}
+      {/* ===== GALLERY (SYMMETRIC) ===== */}
       {project.gallery.length > 0 && (
-        <section className="py-12 border-t border-border/30">
-          <div className="mx-auto max-w-[1100px] px-5 sm:px-8">
-            <div className="flex items-center justify-between mb-6">
+        <section className="py-12 border-t border-border/30 bg-surface/20">
+          <div className="mx-auto max-w-[1100px] px-6 sm:px-10">
+            <div className="flex items-center justify-between mb-6 border-b border-border/30 pb-4">
               <div>
-                <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">
-                  Gallery
-                </p>
-                <h2 className="text-xl font-display tracking-tight">Visual Story</h2>
+                <div className="flex items-center gap-3 mb-1">
+                  <div className="h-px w-6 bg-border"></div>
+                  <p className="text-[10px] text-muted-foreground/80 uppercase tracking-wider italic">
+                    Gallery
+                  </p>
+                </div>
+                <h2 className="text-xl font-medium tracking-tight">
+                  Visual <span className="italic text-muted-foreground/60">Story.</span>
+                </h2>
               </div>
               <button
                 onClick={() => openLightbox(videos.length)}
-                className="group flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                className="group flex items-center gap-1.5 text-xs text-muted-foreground/80 transition-colors hover:text-foreground"
               >
                 View all 
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -503,7 +521,7 @@ function ProjectPage() {
                 <button
                   key={i}
                   onClick={() => openLightbox(videos.length + i)}
-                  className="group relative overflow-hidden rounded-xl border border-border/30 transition-all hover:shadow-lg hover:border-primary/20"
+                  className="group relative overflow-hidden rounded-xl border border-border/30 transition-all hover:shadow-lg hover:border-border/50"
                 >
                   <img 
                     src={g} 
@@ -523,19 +541,24 @@ function ProjectPage() {
         </section>
       )}
 
-      {/* ===== RELATED PROJECTS ===== */}
-      <section className="py-16 border-t border-border/30 bg-surface/10">
-        <div className="mx-auto max-w-[1100px] px-5 sm:px-8">
-          <div className="flex items-center justify-between mb-6">
+      {/* ===== RELATED PROJECTS (SYMMETRIC) ===== */}
+      <section className="py-16 border-t border-border/30 bg-surface/20">
+        <div className="mx-auto max-w-[1100px] px-6 sm:px-10">
+          <div className="flex items-center justify-between mb-6 border-b border-border/30 pb-4">
             <div>
-              <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">
-                Explore More
-              </p>
-              <h2 className="text-xl font-display tracking-tight">Related Work</h2>
+              <div className="flex items-center gap-3 mb-1">
+                <div className="h-px w-6 bg-border"></div>
+                <p className="text-[10px] text-muted-foreground/80 uppercase tracking-wider italic">
+                  Explore More
+                </p>
+              </div>
+              <h2 className="text-xl font-medium tracking-tight">
+                Related <span className="italic text-muted-foreground/60">Work.</span>
+              </h2>
             </div>
             <Link 
               to="/work" 
-              className="group flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+              className="group flex items-center gap-1.5 text-xs text-muted-foreground/80 transition-colors hover:text-foreground"
             >
               View all projects
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -548,7 +571,7 @@ function ProjectPage() {
                 key={p.slug}
                 to="/work/$slug"
                 params={{ slug: p.slug }}
-                className="group overflow-hidden rounded-xl border border-border/30 bg-background transition-all hover:shadow-lg hover:border-primary/20"
+                className="group overflow-hidden rounded-xl border border-border/30 bg-background transition-all hover:shadow-lg hover:border-border/50"
               >
                 <img 
                   src={p.image} 
@@ -557,7 +580,7 @@ function ProjectPage() {
                   className="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="p-3">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{p.client}</p>
+                  <p className="text-[10px] text-muted-foreground/80 uppercase tracking-wider italic">{p.client}</p>
                   <p className="text-xs font-medium line-clamp-1">{p.title}</p>
                 </div>
               </Link>
@@ -566,31 +589,34 @@ function ProjectPage() {
         </div>
       </section>
 
-      {/* ===== CTA ===== */}
-      <section className="py-16">
-        <div className="mx-auto max-w-[1100px] px-5 text-center sm:px-8">
-          <div className="rounded-2xl bg-gradient-to-br from-primary/5 via-transparent to-primary/5 border border-primary/10 p-10">
-            <h2 className="text-2xl font-display tracking-tight sm:text-3xl">
-              Ready to create something <span className="text-primary">exceptional</span>?
+      {/* ===== CTA (SYMMETRIC - DARK) ===== */}
+      <section className="bg-ink py-32 text-ink-foreground relative overflow-hidden text-center border-t border-ink-foreground/10">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
+        
+        <div className="relative mx-auto max-w-4xl px-6">
+          <Reveal>
+            <h2 className="text-5xl md:text-6xl font-medium tracking-tight leading-tight">
+              Ready to create something <br />
+              <span className="italic text-ink-foreground/40">exceptional</span>?
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
+            <p className="mx-auto mt-6 max-w-xl text-ink-foreground/60 text-lg">
               Let's bring your brand story to life with our production expertise.
             </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Link 
-                to="/contact" 
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-medium text-primary-foreground transition-all hover:shadow-xl hover:scale-105"
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-3 bg-primary text-ink px-10 py-4 rounded-full text-sm font-medium tracking-wide hover:bg-primary/90 hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/20"
               >
                 Start a project <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link 
-                to="/services" 
-                className="inline-flex items-center gap-2 rounded-full border border-border px-7 py-3 text-sm font-medium transition-all hover:bg-muted"
+              <Link
+                to="/services"
+                className="inline-flex items-center gap-2 text-sm text-ink-foreground/60 hover:text-ink-foreground transition-colors"
               >
                 Explore services
               </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 

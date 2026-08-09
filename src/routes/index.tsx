@@ -1,36 +1,24 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { motion } from "motion/react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   ArrowRight,
   ArrowUpRight,
-  Clapperboard,
-  Film,
-  MonitorPlay,
-  MousePointerClick,
-  Package,
-  PenLine,
-  Plane,
-  Play,
-  Send,
-  Share2,
-  Sparkles,
-  Video,
-  Wand2,
   CheckCircle,
-  Star,
-  Users,
-  Briefcase,
+  Sparkles,
   Zap,
   Award,
   Shield,
   Clock,
+  Play,
+  Camera,
+  Film,
 } from "lucide-react";
 
 import { Reveal, RevealWords } from "@/components/site/Reveal";
 import { BrandMarquee } from "@/components/site/Marquee";
 import { Counter } from "@/components/site/Counter";
-import { MagneticLink, TiltCard } from "@/components/site/TiltCard";
+import { TiltCard } from "@/components/site/TiltCard";
 import { VideoPlayer } from "@/components/site/VideoPlayer";
 import { StudioLocations } from "@/components/site/StudioLocations";
 import { TestimonialCarousel } from "@/components/site/TestimonialCarousel";
@@ -41,17 +29,17 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "HappyLamb Production — Ad Film & Video Production Studio" },
+      { title: "HappyLamb Production — Premium Film & Branding Studio" },
       {
         name: "description",
         content:
-          "A video-first production studio: ad films, product reels, corporate films and brand campaigns. Watch the work, then brief us.",
+          "A craft-driven production studio: ad films, product reels, corporate films and brand campaigns. We build stories that move.",
       },
-      { property: "og:title", content: "HappyLamb Production — Video-First Advertising Studio" },
+      { property: "og:title", content: "HappyLamb Production — Premium Film Studio" },
       {
         property: "og:description",
         content:
-          "Ad films, product reels, corporate films and brand campaigns for national brands. Watch the showreel.",
+          "Ad films, product reels, corporate films and brand campaigns. Craft that works.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -61,6 +49,79 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+// ═══ Carousel Component for Studio Visuals (FIXED: No Flash + 4 Images) ═══
+function StudioCarousel() {
+  const [current, setCurrent] = useState(0);
+  
+  // 🟢 Aap yahan apni 4 studios ki real images daal sakte hain
+  const visuals = [
+    { 
+      type: 'image', 
+      src: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop', 
+      alt: 'Studio 1 - Production Floor' 
+    },
+    { 
+      type: 'image', 
+      src: 'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=2070&auto=format&fit=crop', 
+      alt: 'Studio 2 - Filming Setup' 
+    },
+    { 
+      type: 'image', 
+      src: 'https://images.unsplash.com/photo-1533558701576-2c35cd7cb1ef?q=80&w=2070&auto=format&fit=crop', 
+      alt: 'Studio 3 - Post Production' 
+    },
+    { 
+      type: 'image', 
+      src: 'https://images.unsplash.com/photo-1512418490979-92798cec1380?q=80&w=2070&auto=format&fit=crop', 
+      alt: 'Studio 4 - Creative Space' 
+    },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % visuals.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [visuals.length]);
+
+  return (
+    <div className="relative w-full h-[450px] sm:h-[550px] rounded-2xl overflow-hidden border border-border/40 shadow-xl">
+      {/* ✅ FIX: mode="wait" hata diya aur sirf simple fade animation rakha */}
+      <AnimatePresence>
+        <motion.div
+          key={current}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="absolute inset-0"
+        >
+          <img
+            src={visuals[current].src}
+            alt={visuals[current].alt}
+            className="w-full h-full object-cover grayscale-[15%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Navigation Dots (4 dots now) */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+        {visuals.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`h-1.5 rounded-full transition-all duration-500 ${
+              i === current ? 'w-8 bg-white' : 'w-2 bg-white/40'
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Index() {
   const [cat, setCat] = useState<string>("All");
   const shown = cat === "All" ? STUDIO_VIDEOS : STUDIO_VIDEOS.filter((v) => v.category === cat);
@@ -69,7 +130,7 @@ function Index() {
   const featuredGrid = STUDIO_VIDEOS.slice(1, 5);
   const libraryVideos = shown.slice(0, 6);
 
-  // Why Choose Us data - NO Rocket or TrendingUp
+  // Why Choose Us data
   const whyChooseUs = [
     {
       icon: CheckCircle,
@@ -78,13 +139,13 @@ function Index() {
     },
     {
       icon: Sparkles,
-      title: "AI-Assisted Workflow",
-      desc: "Faster edits, smarter scripts, and better results with AI-accelerated production.",
+      title: "Craft-First Approach",
+      desc: "Every frame is built with precision. We don't ship work we wouldn't sign our names to.",
     },
     {
       icon: Zap,
       title: "Performance Driven",
-      desc: "Every frame is built to convert. We optimize for attention and action.",
+      desc: "Strategy backed by data. We optimize for attention, engagement, and real results.",
     },
     {
       icon: Shield,
@@ -105,131 +166,118 @@ function Index() {
 
   return (
     <>
-      {/* ===== HERO ===== */}
-      <section className="relative isolate overflow-hidden bg-background pt-32 pb-24 sm:pt-40">
-        <div
-          className="pointer-events-none absolute inset-0 -z-10"
-          style={{ background: "var(--gradient-soft)" }}
-          aria-hidden
-        />
-        <motion.div
-          aria-hidden
-          className="absolute -top-40 -left-24 -z-10 h-[28rem] w-[28rem] rounded-full blur-[120px]"
-          style={{ background: "var(--gradient-warm)", opacity: 0.12 }}
-          animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
-          transition={{ repeat: Infinity, duration: 18, ease: "easeInOut" }}
-        />
-
-        <div className="relative mx-auto grid max-w-[1400px] items-center gap-16 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
-          <div>
+      {/* ═══════════════ 1. HERO (SYMMETRIC + CAROUSEL) ═══════════════ */}
+      <section className="relative overflow-hidden min-h-[85vh] flex items-center pt-28 pb-16 bg-background border-b border-border/40">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            {/* Left: Text Content */}
             <Reveal>
-              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 font-heading text-[0.66rem] tracking-[0.24em] text-foreground uppercase shadow-soft">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />
-                AI-Accelerated Video Ad Studio
-              </span>
-            </Reveal>
-
-            <h1 className="display-xl mt-8 text-[clamp(2.6rem,6vw,5rem)] leading-[0.95] text-foreground">
-              <RevealWords text="We Create Video Ads" />{" "}
-              <span className="text-gradient">
-                <RevealWords text="That Sell." />
-              </span>
-            </h1>
-
-            <Reveal delay={0.15}>
-              <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted-foreground">
-                High-converting commercials, product films and brand content — scripted, shot and delivered under one roof.
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-px w-8 bg-primary/50"></div>
+                <p className="text-xs tracking-[0.3em] text-foreground/60 uppercase font-medium">Craft-Driven Studio</p>
+              </div>
+              
+              <h1 className="text-[clamp(3rem,7.5vw,5.5rem)] leading-[0.95] tracking-tighter font-medium text-foreground max-w-4xl">
+                We build stories <br />
+                <span className="italic text-foreground/60">that move.</span>
+              </h1>
+              
+              <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
+                Ad films, product reels, and brand campaigns — crafted with precision, backed by data. 
+                Every frame serves a purpose.
               </p>
-            </Reveal>
-
-            <Reveal delay={0.24} className="mt-10 flex flex-wrap items-center gap-4">
-              <MagneticLink>
+              
+              <div className="mt-8 flex flex-wrap items-center gap-6">
                 <Link
                   to="/work"
-                  className="group inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 font-heading text-[0.78rem] tracking-[0.2em] text-primary-foreground uppercase shadow-glow transition-transform duration-300 hover:scale-[1.03]"
+                  className="inline-flex items-center gap-2 border-b border-foreground pb-1 text-sm tracking-wider hover:gap-4 transition-all duration-300"
                 >
-                  View Portfolio
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  View Portfolio <ArrowRight className="h-4 w-4" />
                 </Link>
-              </MagneticLink>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 rounded-full border border-border px-8 py-4 font-heading text-[0.78rem] tracking-[0.2em] uppercase transition-all duration-300 hover:border-primary hover:text-primary"
-              >
-                Book a Free Call
-              </Link>
+                <Link
+                  to="/contact"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Book a Call
+                </Link>
+              </div>
+              
+              <Reveal delay={0.15} className="mt-10 grid max-w-xs grid-cols-3 gap-8 border-t border-border/60 pt-8">
+                <Counter to={100} suffix="+" label="Projects" />
+                <Counter to={50} suffix="+" label="Brands" />
+                <Counter to={10} suffix="+" label="Industries" />
+              </Reveal>
             </Reveal>
 
-            <Reveal delay={0.3} className="mt-14 grid max-w-md grid-cols-3 gap-8 border-t border-border pt-8">
-              <Counter to={100} label="Projects" />
-              <Counter to={50} label="Brands" />
-              <Counter to={10} label="Industries" />
+            {/* Right: Studio Carousel (4 Photos) */}
+            <Reveal delay={0.2}>
+              <StudioCarousel />
             </Reveal>
           </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <motion.div
-              animate={{ y: [0, -12, 0] }}
-              transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
-            >
-              <StudioLocations />
-            </motion.div>
-          </motion.div>
         </div>
       </section>
 
-      {/* ===== TRUSTED BRANDS ===== */}
-      <section className="border-y border-border bg-surface py-12">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <p className="eyebrow mb-8 text-center">Trusted by brands across 10+ industries</p>
+      {/* ═══════════════ 2. TRUSTED BRANDS (SYMMETRIC) ═══════════════ */}
+      <section className="border-y border-border/30 bg-surface/50 py-12">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+          <p className="text-center text-xs tracking-[0.2em] text-muted-foreground uppercase italic mb-8">Trusted by brands across 10+ industries</p>
           <BrandMarquee />
         </div>
       </section>
 
-      {/* ===== WHO WE ARE ===== */}
-      <section className="py-24">
-        <div className="mx-auto max-w-[1100px] px-5 text-center sm:px-8">
+      {/* ═══════════════ 3. WHO WE ARE (SYMMETRIC) ═══════════════ */}
+      <section className="py-24 bg-background">
+        <div className="mx-auto max-w-[1100px] px-6 text-center sm:px-10">
           <Reveal>
-            <p className="eyebrow">Who we are</p>
-            <h2 className="display-xl mt-5 text-[clamp(2rem,4.3vw,3.4rem)]">
-              A video-first advertising studio, engineered end to end.
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase italic">Who We Are</p>
+              <div className="h-px w-6 bg-border"></div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight">
+              A studio built on <br />
+              <span className="italic text-muted-foreground/60">craft, contracts & credibility.</span>
             </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Strategy, scripting, direction, cinematography and post — all under one roof. Fewer hand-offs. Tighter timelines. Broadcast quality at digital speed.
+            <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground leading-relaxed">
+              Strategy, scripting, direction, cinematography, and post — all under one roof. 
+              Fewer hand-offs. Tighter timelines. Broadcast quality at digital speed.
             </p>
           </Reveal>
 
-          <Reveal delay={0.1} className="mt-14 grid grid-cols-2 gap-5 sm:grid-cols-4">
+          <Reveal delay={0.1} className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {[
               { k: "Founded", v: "2021" },
               { k: "Films", v: "100+" },
               { k: "Cities", v: "14" },
               { k: "Turnaround", v: "3 weeks" },
             ].map((s) => (
-              <div key={s.k} className="rounded-2xl border border-border bg-card px-5 py-6 shadow-soft">
-                <p className="font-display text-3xl tracking-wide text-foreground">{s.v}</p>
-                <p className="eyebrow mt-2">{s.k}</p>
+              <div key={s.k} className="border-b border-border/40 py-4">
+                <p className="font-medium text-3xl tracking-tight text-foreground">{s.v}</p>
+                <p className="text-xs text-muted-foreground mt-1">{s.k}</p>
               </div>
             ))}
           </Reveal>
         </div>
       </section>
 
-      {/* ===== FEATURED WORK ===== */}
-      <section className="border-y border-border bg-surface py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+      {/* ═══════════════ 4. FEATURED WORK (SYMMETRIC + PREMIUM VIDEOS) ═══════════════ */}
+      <section className="border-y border-border/30 bg-surface/30 py-24">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <p className="eyebrow">Selected work</p>
-              <h2 className="display-xl mt-4 text-[clamp(2rem,4.3vw,3.4rem)]">Featured Films</h2>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="h-px w-6 bg-border"></div>
+                <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase italic">Selected Work</p>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-medium tracking-tight">
+                Featured <br />
+                <span className="italic text-muted-foreground/60">Films.</span>
+              </h2>
             </div>
             <Link
               to="/work"
-              className="inline-flex items-center gap-2 font-heading text-sm tracking-[0.18em] uppercase transition-colors hover:text-primary"
+              className="inline-flex items-center gap-2 text-sm font-medium hover:gap-4 transition-all duration-300"
             >
               View all projects <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -245,7 +293,7 @@ function Index() {
                 meta={featuredMain.meta}
                 category={featuredMain.category}
                 aspect="16/9"
-                className="rounded-2xl"
+                className="rounded-xl shadow-sm border border-border/40"
               />
             </Reveal>
           )}
@@ -261,7 +309,7 @@ function Index() {
                   meta={v.meta}
                   category={v.category}
                   aspect="16/9"
-                  className="rounded-2xl"
+                  className="rounded-xl shadow-sm border border-border/40"
                 />
               </Reveal>
             ))}
@@ -269,76 +317,83 @@ function Index() {
         </div>
       </section>
 
-      {/* ===== WHY US ===== */}
-      <section className="py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+      {/* ═══════════════ 5. WHY US (SYMMETRIC) ═══════════════ */}
+      <section className="py-24 bg-background">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
           <Reveal className="text-center max-w-3xl mx-auto">
-            <p className="eyebrow">Why Choose Us</p>
-            <h2 className="display-xl mt-4 text-[clamp(2rem,4.2vw,3.2rem)]">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase italic">Why Us</p>
+              <div className="h-px w-6 bg-border"></div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight">
               We don't just make videos.<br />
-              <span className="text-primary">We create results.</span>
+              <span className="italic text-muted-foreground/60">We create results.</span>
             </h2>
           </Reveal>
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {whyChooseUs.map((item, i) => (
               <Reveal key={item.title} delay={(i % 3) * 0.05}>
-                <TiltCard className="h-full">
-                  <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card p-7 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:border-primary/40 hover:shadow-glow">
-                    <span className="relative grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
-                      <item.icon className="h-5 w-5" />
-                    </span>
-                    <h3 className="relative mt-6 font-display text-xl tracking-wide">{item.title}</h3>
-                    <p className="relative mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                      {item.desc}
-                    </p>
-                  </div>
-                </TiltCard>
+                <div className="group relative h-full overflow-hidden rounded-xl border border-border/40 bg-surface/30 p-7 transition-all duration-300 hover:shadow-md hover:-translate-y-1">
+                  <span className="relative grid h-10 w-10 place-items-center rounded-full bg-muted/20 text-muted-foreground">
+                    <item.icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="relative mt-5 font-medium text-lg tracking-tight">{item.title}</h3>
+                  <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ===== PROCESS ===== */}
-      <section className="border-y border-border bg-surface py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+      {/* ═══════════════ 6. PROCESS (SYMMETRIC) ═══════════════ */}
+      <section className="border-y border-border/30 bg-surface/50 py-24">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
           <Reveal>
-            <p className="eyebrow">Our process</p>
-            <h2 className="display-xl mt-4 text-[clamp(2rem,4.2vw,3.2rem)]">Brief to broadcast</h2>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase italic">Process</p>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight mb-4">
+              Brief to <br />
+              <span className="italic text-muted-foreground/60">broadcast.</span>
+            </h2>
           </Reveal>
 
-          <div className="relative mt-16">
-            <div className="absolute top-6 right-0 left-0 hidden h-px bg-border lg:block" aria-hidden />
-            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
-              {[
-                { step: "Strategy", copy: "Category, audience and the single idea worth filming." },
-                { step: "Script", copy: "Script, storyboard and fast AI-assisted variants." },
-                { step: "Shoot", copy: "Director-led unit on RED & ARRI systems." },
-                { step: "Edit", copy: "Grade, sound design and voice-over in one suite." },
-                { step: "Delivery", copy: "Every aspect ratio and platform master, on schedule." },
-              ].map((p, i) => (
-                <Reveal key={p.step} delay={i * 0.06} className="relative">
-                  <span className="relative grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-primary shadow-soft">
-                    {i + 1}
-                  </span>
-                  <p className="eyebrow mt-5">Step {i + 1}</p>
-                  <h3 className="mt-1.5 font-display text-lg tracking-wide">{p.step}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.copy}</p>
-                </Reveal>
-              ))}
-            </div>
+          <div className="relative mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+            {[
+              { step: "Strategy", copy: "Category, audience and the single idea worth filming." },
+              { step: "Script", copy: "Script, storyboard and fast AI-assisted variants." },
+              { step: "Shoot", copy: "Director-led unit on cinema-grade systems." },
+              { step: "Edit", copy: "Grade, sound design and voice-over in one suite." },
+              { step: "Delivery", copy: "Every aspect ratio and platform master, on schedule." },
+            ].map((p, i) => (
+              <Reveal key={p.step} delay={i * 0.06} className="relative flex flex-col border-t-2 border-foreground/10 pt-6">
+                <span className="text-4xl font-light tracking-tighter text-foreground/10 mb-2">0{i + 1}</span>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground italic">{p.step}</p>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.copy}</p>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ===== TESTIMONIALS ===== */}
-      <section className="py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal className="text-center">
-            <p className="eyebrow">Client love</p>
-            <h2 className="display-xl mt-4 text-[clamp(2rem,4.2vw,3.2rem)]">
-              What brand teams say
+      {/* ═══════════════ 7. TESTIMONIALS (SYMMETRIC) ═══════════════ */}
+      <section className="py-24 bg-background">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+          <Reveal className="text-center max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px w-6 bg-border"></div>
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase italic">Client Love</p>
+              <div className="h-px w-6 bg-border"></div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight">
+              What brand teams <br />
+              <span className="italic text-muted-foreground/60">say.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.1} className="mt-14">
@@ -347,140 +402,12 @@ function Index() {
         </div>
       </section>
 
-      {/* ===== STUDIO LIBRARY ===== */}
-      <section className="border-y border-border bg-surface py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">Studio library</p>
-              <h2 className="display-xl mt-4 text-[clamp(2rem,4.2vw,3.2rem)]">
-                More from the archive
-              </h2>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08} className="mt-10">
-            <div className="flex flex-wrap gap-2.5">
-              {VIDEO_CATEGORIES.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setCat(c)}
-                  className={`rounded-full px-5 py-2.5 font-heading text-[0.68rem] tracking-[0.16em] uppercase transition-all duration-300 ${
-                    cat === c
-                      ? "bg-primary text-primary-foreground shadow-glow"
-                      : "border border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-primary"
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          <div className="mt-12 grid gap-6 sm:grid-cols-2">
-            {libraryVideos.map((v, i) => (
-              <Reveal key={v.id} delay={(i % 2) * 0.06}>
-                <VideoPlayer
-                  src={v.src}
-                  poster={v.poster}
-                  title={v.title}
-                  client={v.client}
-                  meta={v.meta}
-                  category={v.category}
-                  aspect="16/9"
-                  className="rounded-2xl"
-                />
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal className="mt-14 flex justify-center">
-            <Link
-              to="/work"
-              className="inline-flex items-center gap-2 rounded-full border border-border px-8 py-3.5 font-heading text-sm tracking-[0.18em] uppercase transition-all hover:border-primary hover:text-primary"
-            >
-              View All Films <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ===== CASE STUDIES ===== */}
-      <section className="py-24">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal className="flex flex-wrap items-end justify-between gap-6">
-            <h2 className="display-xl text-[clamp(2rem,4.2vw,3.2rem)]">Case studies</h2>
-            <Link
-              to="/work"
-              className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 font-heading text-[0.7rem] tracking-[0.18em] uppercase transition-colors hover:border-primary hover:text-primary"
-            >
-              All projects <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </Reveal>
-
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
-            {PROJECTS.slice(0, 3).map((p, i) => (
-              <Reveal key={p.slug} delay={i * 0.07} className={i === 0 ? "lg:col-span-2" : ""}>
-                <Link
-                  to="/work/$slug"
-                  params={{ slug: p.slug }}
-                  className="group relative block h-full overflow-hidden rounded-2xl border border-border shadow-soft"
-                >
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    loading="lazy"
-                    className="h-[280px] w-full object-cover transition-transform duration-700 group-hover:scale-105 lg:h-[360px]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-7">
-                    <p className="eyebrow text-ink-foreground/80">
-                      {p.client} • {p.category}
-                    </p>
-                    <h3 className="mt-2 font-display text-xl tracking-wide text-ink-foreground sm:text-2xl">
-                      {p.title}
-                    </h3>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== CTA ===== */}
-      <section className="pb-28">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-          <Reveal className="relative isolate overflow-hidden rounded-[2rem] border border-border bg-surface px-8 py-20 text-center">
-            <motion.div
-              aria-hidden
-              className="absolute -top-32 left-1/4 -z-10 h-[24rem] w-[24rem] rounded-full blur-[130px]"
-              style={{ background: "var(--gradient-warm)", opacity: 0.14 }}
-              animate={{ x: [0, 100, 0], y: [0, 40, 0] }}
-              transition={{ repeat: Infinity, duration: 16, ease: "easeInOut" }}
-            />
-            <p className="eyebrow">Let's roll camera</p>
-            <h2 className="display-xl mx-auto mt-5 max-w-3xl text-[clamp(2rem,4.8vw,3.6rem)]">
-              Ready to create your next winning video ad?
-            </h2>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <MagneticLink>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 rounded-full bg-primary px-9 py-4 font-heading text-[0.78rem] tracking-[0.2em] text-primary-foreground uppercase shadow-glow transition-transform hover:scale-[1.03]"
-                >
-                  Book a Call <ArrowRight className="h-4 w-4" />
-                </Link>
-              </MagneticLink>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 rounded-full border border-border px-9 py-4 font-heading text-[0.78rem] tracking-[0.2em] uppercase transition-colors hover:border-primary hover:text-primary"
-              >
-                <MousePointerClick className="h-4 w-4" /> Get Free Quote
-              </Link>
-            </div>
-          </Reveal>
+      {/* ═══════════════ 8. FINAL SYMMETRIC DIVIDER (Only Border) ═══════════════ */}
+      <section className="py-24 bg-background border-t border-border/30">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10 text-center">
+          <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase italic">
+            Crafted with precision in India
+          </p>
         </div>
       </section>
     </>
